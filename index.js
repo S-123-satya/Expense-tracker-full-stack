@@ -44,8 +44,21 @@ app.post('/login', (req, res) => {
     })
         .then(result => {
             console.log(`result`);
+            console.log(result);
+            if(result.length===0){
+                res.status(404);
+                res.json({name:"user does not Exists"});
+            }
+            else if(result[0].dataValues.password===req.body.password){
             console.log(result[0].dataValues);
             res.json(result[0].dataValues);
+            }
+            else{
+                console.log(`password not matched`);
+                // console.log(object);
+                res.status(401);
+                res.json({name:"user password is not correct"});
+            }
             // res.redirect('/');
         })
         .catch(err => {

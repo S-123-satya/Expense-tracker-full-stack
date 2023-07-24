@@ -52,7 +52,11 @@ const login = (e) => {
                 alert('user login successful')
             }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            const showResult = document.getElementById('showResult');
+            showResult.innerHTML = err.response.data.name;
+        });
     email.value = '';
     password.value = '';
 
