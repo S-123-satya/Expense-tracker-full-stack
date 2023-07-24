@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000/';
+const url = 'http://localhost:2000/';
 
 const save = (e) => {
     // e.preventDefault();
@@ -28,7 +28,7 @@ const save = (e) => {
     email.value = '';
     password.value = '';
 
-s}
+}
 const login = (e) => {
     // e.preventDefault();
     console.log(e);

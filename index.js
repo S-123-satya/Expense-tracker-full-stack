@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const bcrypt = require('bcrypt');
 const sequelize = require('./util/db');
 const User = require('./model/dbmodel');
 const { isBooleanObject } = require('util/types');
@@ -22,15 +23,20 @@ app.post('/', (req, res) => {
     console.log(`req.body.email=${req.body.email}`);
     console.log(`req.body.password=${req.body.password}`);
     console.log(`req.body.User=${req.body}`);
-    User.create(req.body)
-        .then(result => {
-            console.log(result);
-            res.json(result);
-            // res.redirect('/');
-        })
-        .catch(err => {
-            console.log(err)
-            res.send(err);
+    bcrypt.hash(req.body.password, 10)
+        .then(function (hash) {
+            // Store hash in your password DB.
+            req.body.password = hash;
+            User.create(req.body)
+                .then(result => {
+                    console.log(result);
+                    res.json(result);
+                    // res.redirect('/');
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.send(err);
+                });
         });
 })
 app.post('/login', (req, res) => {
@@ -43,23 +49,28 @@ app.post('/login', (req, res) => {
         }
     })
         .then(result => {
+            if (result.length === 0) {
+                res.status(404);
+                res.json({ name: "user does not Exists" });
+            }
+            bcrypt.compare(req.body.password, result[0].dataValues.password)
+                .then(function (resu) {
+                    // result == true
+                    if (resu === true) {
+                        console.log(result[0].dataValues);
+                        res.json(result[0].dataValues);
+                    }
+                    else {
+                        console.log(hash);
+                        console.log(`password not matched`);
+                        // console.log(object);
+                        res.status(401);
+                        res.json({ name: "user password is not correct" });
+                    }
+                });
+
             console.log(`result`);
             console.log(result);
-            if(result.length===0){
-                res.status(404);
-                res.json({name:"user does not Exists"});
-            }
-            else if(result[0].dataValues.password===req.body.password){
-            console.log(result[0].dataValues);
-            res.json(result[0].dataValues);
-            }
-            else{
-                console.log(`password not matched`);
-                // console.log(object);
-                res.status(401);
-                res.json({name:"user password is not correct"});
-            }
-            // res.redirect('/');
         })
         .catch(err => {
             console.log(err)
@@ -74,4 +85,4 @@ User.sync({ force: false })
 // sequelize.authenticate()
 // .then(con=>console.log(con))
 // .catch(err=>console.log(err));
-app.listen(3000, console.log(`listening on port 3000`));
+app.listen(2000, console.log(`listening on port 3000`));
