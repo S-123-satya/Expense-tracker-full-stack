@@ -1,6 +1,11 @@
 const url = 'http://localhost:3000';
 
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('UserId');
+const config={
+    headers: {
+      Authorization: `${localStorage.getItem('UserId')}` //the token is a variable which holds the token
+    }
+   }
 const save = (e) => {
     // e.preventDefault();
     console.log(e);
@@ -40,7 +45,7 @@ const display=(data)=>{
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
-    axios.get(`${url}/expensedata`)
+    axios.get(`${url}/expensedata`,config)
     .then(data=>{
         console.log(data);
         data.data.forEach(element => {

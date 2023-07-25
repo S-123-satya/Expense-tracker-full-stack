@@ -109,8 +109,13 @@ app.get('/expensedata', (req, res) => {
     // res.json({name:'message connected'});
     console.log(`Customer details are: `);
     console.clear();
-    console.log(req);
-    Expense.findAll()
+    console.log(req.headers.authorization);
+    // console.log(req);
+    Expense.findAll({
+        where:{
+            UserId:req.headers.authorization
+        }
+    })
     .then(result=>{
         console.log(result);
         res.json(result);
