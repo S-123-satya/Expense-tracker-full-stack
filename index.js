@@ -7,8 +7,10 @@ const User = require('./model/dbmodel');
 const { isBooleanObject } = require('util/types');
 const { json } = require('body-parser');
 const bodyParser = require('body-parser');
+const Expense = require('./model/expensemodel');
 const app = express();
 
+const port=3000;
 app.use(cors());
 app.use(express.json());
 // app.use(bodyParser.json())
@@ -18,6 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 })
+
 app.post('/', (req, res) => {
     console.log(`req.body.name=${req.body.name}`);
     console.log(`req.body.email=${req.body.email}`);
@@ -39,6 +42,7 @@ app.post('/', (req, res) => {
                 });
         });
 })
+
 app.post('/login', (req, res) => {
     console.log(`req.body.email=${req.body.email}`);
     console.log(`req.body.password=${req.body.password}`);
@@ -78,11 +82,40 @@ app.post('/login', (req, res) => {
         });
 })
 
-User.sync({ force: false })
+app.get('/expense', (req, res) => {
+    // res.json({name:'message connected'});
+    res.sendFile(path.join(__dirname, 'expense.html'));
+})
+
+app.post('/expense',(req,res)=>{
+    console.log(req.body);
+    Expense.create(req.body)
+    .then(result => {
+        console.log(result);
+        res.json(result);
+        // res.redirect('/');
+    })
+    .catch(err => {
+        console.log(err)
+        res.send(err);
+    });
+})
+
+app.get('/expensedata', (req, res) => {
+    // res.json({name:'message connected'});
+    Expense.findAll()
+    .then(result=>{
+        console.log(result);
+        res.json(result);
+    })
+    .catch(err=>console.log(err));
+})
+
+sequelize.sync({ force: false })
     .then(result => console.log(result))
     .catch(err => console.log(err));
 
 // sequelize.authenticate()
 // .then(con=>console.log(con))
 // .catch(err=>console.log(err));
-app.listen(2000, console.log(`listening on port 3000`));
+app.listen(port, console.log(`listening on port 3000`));

@@ -1,4 +1,4 @@
-const url = 'http://localhost:2000/';
+const url = 'http://localhost:3000';
 
 const save = (e) => {
     // e.preventDefault();
@@ -41,7 +41,7 @@ const login = (e) => {
     }
     console.log(obj);
 
-    axios.post(`${url}login`, obj)
+    axios.post(`${url}/login`, obj)
         .then(data => {
             console.log(`data`+data.data);
             console.log(data.data.email);

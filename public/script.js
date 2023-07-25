@@ -1,0 +1,48 @@
+const url = 'http://localhost:3000';
+
+const save = (e) => {
+    // e.preventDefault();
+    console.log(e);
+    console.log('hello');
+    const expenseInput = document.getElementById('expenseInput');
+    const descriptionInput = document.getElementById('descriptionInput');
+    const categoryInput = document.getElementById('categoryInput');
+    const obj = {
+        expenseInput: expenseInput.value,
+        descriptionInput: descriptionInput.value,
+        categoryInput: categoryInput.value
+    }
+    console.log(obj);
+
+    axios.post(`${url}/expense`, obj)
+        .then(data => {
+            console.log(data);
+            display(data.data);
+        })
+        .catch(err => console.log(err));
+    expenseInput.value = '';
+    descriptionInput.value = '';
+    categoryInput.value = '';
+
+}
+
+const display=(data)=>{
+    console.log(data);
+    const expenseList = document.getElementById('expenseList');
+    expenseList.innerHTML+=`<li id="`+`${data.id}`+`"> 
+    ${data.expenseInput} ${data.descriptionInput} ${data.categoryInput}
+    <button onclick="`+`delete('${data.id}')`+`">Delete</button>
+    </li>`
+    
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+    axios.get(`${url}/expensedata`)
+    .then(data=>{
+        console.log(data);
+        data.data.forEach(element => {
+            display(element);
+        });
+    })
+    .catch(err=>console.log(err));
+})
