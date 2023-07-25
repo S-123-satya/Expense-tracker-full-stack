@@ -1,8 +1,10 @@
 const url = 'http://localhost:3000';
 
+// axios.defaults.headers.common['Authorization'] = localStorage.getItem('UserId');
 const save = (e) => {
     // e.preventDefault();
     console.log(e);
+    console.log(Object.keys(localStorage)[0]);
     console.log('hello');
     const expenseInput = document.getElementById('expenseInput');
     const descriptionInput = document.getElementById('descriptionInput');
@@ -10,7 +12,8 @@ const save = (e) => {
     const obj = {
         expenseInput: expenseInput.value,
         descriptionInput: descriptionInput.value,
-        categoryInput: categoryInput.value
+        categoryInput: categoryInput.value,
+        UserId:localStorage.getItem(`UserId`)
     }
     console.log(obj);
 

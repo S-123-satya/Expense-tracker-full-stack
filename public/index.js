@@ -44,9 +44,9 @@ const login = (e) => {
     axios.post(`${url}/login`, obj)
         .then(data => {
             console.log(`data`+data.data);
-            console.log(data.data.email);
+            console.log(data.data);
+            localStorage.setItem(`UserId`,`${data.data.userId}`)
             if (data.data.email == obj.email) {
-                console.log('duplicate');
                 const showResult = document.getElementById('showResult');
                 showResult.innerHTML = 'User login successfully';
                 alert('user login successful')

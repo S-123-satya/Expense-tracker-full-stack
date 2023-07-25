@@ -43,6 +43,10 @@ app.post('/', (req, res) => {
         });
 })
 
+app.get('/login',(req,res)=>{
+    res.sendFile(path.join(__dirname,'public','login.html'))
+})
+
 app.post('/login', (req, res) => {
     console.log(`req.body.email=${req.body.email}`);
     console.log(`req.body.password=${req.body.password}`);
@@ -62,7 +66,7 @@ app.post('/login', (req, res) => {
                     // result == true
                     if (resu === true) {
                         console.log(result[0].dataValues);
-                        res.json(result[0].dataValues);
+                        res.json({name:result[0].dataValues.name,userId:result[0].dataValues.id,email:result[0].dataValues.email});
                     }
                     else {
                         console.log(hash);
@@ -103,6 +107,9 @@ app.post('/expense',(req,res)=>{
 
 app.get('/expensedata', (req, res) => {
     // res.json({name:'message connected'});
+    console.log(`Customer details are: `);
+    console.clear();
+    console.log(req);
     Expense.findAll()
     .then(result=>{
         console.log(result);
@@ -111,8 +118,11 @@ app.get('/expensedata', (req, res) => {
     .catch(err=>console.log(err));
 })
 
+User.hasMany(Expense);
+Expense.belongsTo(User);
+
 sequelize.sync({ force: false })
-    .then(result => console.log(result))
+    .then(result => console.log(`connected to data base`))
     .catch(err => console.log(err));
 
 // sequelize.authenticate()
