@@ -22,32 +22,35 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">SignUp</a>
+                            <a class="nav-link active" aria-current="page" href="/signup.html">SignUp</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
+                            <a class="nav-link" href="/login.html">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/expense">Expense</a>
+                            <a class="nav-link" href="/expense.html">Expense</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
         <form action="/" method="post" onsubmit="save();return false;">
-            <div class="mb-3">
-                <label for="exampleInputText1" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" aria-describedby="textHelp" name="name" required>
+            <div class="form-row">
+                <div class="mb-3">
+                    <label for="exampleInputText1" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" aria-describedby="textHelp" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         <div id="showResult" style="color: red;"></div>
     </div>
@@ -57,7 +60,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
         integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="index.js"></script>
+    <script src="login.js"></script>
 </body>
 
 </html>

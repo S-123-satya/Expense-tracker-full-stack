@@ -6,7 +6,7 @@ const config={
       Authorization: `${localStorage.getItem('UserId')}` //the token is a variable which holds the token
     }
    }
-const save = (e) => {
+const saveExpense = (e) => {
     // e.preventDefault();
     console.log(e);
     console.log(Object.keys(localStorage)[0]);
