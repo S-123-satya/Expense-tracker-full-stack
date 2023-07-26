@@ -1,8 +1,7 @@
 const express = require('express');
+const { postLoginController } = require('../controllers/loginControllers');
 const router=express.Router();
 
-router.get('/',(req,res)=>{
-    res.json({message:'hello login routes'});
-})
+router.post('/',postLoginController)
 
 module.exports=router;

@@ -2,76 +2,78 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="container m-3">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                  <a class="navbar-brand" href="/">Expenses</a>
-                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                  </button>
-                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                      <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/signup.html">SignUp</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="/login.html">Login</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link active" href="/expense.html">Expense</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </nav>
-        <h2>Expense Tracker</h2>
+  <div class="container m-3">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Expenses</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/signup.html">SignUp</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login.html">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/expense.html">Expense</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="mx-3 " id="userName"></div>
+    </nav>
+    <h2>Expense Tracker</h2>
 
-        <form id="expenseForm" onsubmit="saveExpense();return false;" class="mt-4">
-            <div class="form-row">
-                <div class=" mb-3">
-                    <label for="expenseInput">Expense</label>
-                    <input type="number" class="form-control" id="expenseInput" required>
-                </div>
-                <div class=" mb-3">
-                    <label for="descriptionInput">Description</label>
-                    <input type="text" class="form-control" id="descriptionInput" required>
-                </div>
-                <div class=" mb-3">
-                    <label for="categoryInput">Category</label>
-                    <select class="form-control" id="categoryInput" required>
-                        <option value="">Choose Category</option>
-                        <option value="movies">Movies</option>
-                        <option value="trip">Trip</option>
-                        <option value="food">Food</option>
-                        <option value="product">Product</option>
-                        <option value="gym">Gym</option>
-                        <option value="recharge">Recharge</option>
-                    </select>
-                </div>
-                <div class="col-md-1 mb-3">
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </div>
-            </div>
-        </form>
+    <form id="expenseForm" onsubmit="saveExpense();return false;" class="mt-4">
+      <div class="form-row">
+        <div class=" mb-3">
+          <label for="expenseInput">Expense</label>
+          <input type="number" class="form-control" id="expenseInput" required>
+        </div>
+        <div class=" mb-3">
+          <label for="descriptionInput">Description</label>
+          <input type="text" class="form-control" id="descriptionInput" required>
+        </div>
+        <div class=" mb-3">
+          <label for="categoryInput">Category</label>
+          <select class="form-control" id="categoryInput" required>
+            <option value="">Choose Category</option>
+            <option value="movies">Movies</option>
+            <option value="trip">Trip</option>
+            <option value="food">Food</option>
+            <option value="product">Product</option>
+            <option value="gym">Gym</option>
+            <option value="recharge">Recharge</option>
+          </select>
+        </div>
+        <div class="col-md-1 mb-3">
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </form>
 
-        <ul id="expenseList" class="list-group mt-5"></ul>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
-        integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="expense.js"></script>
-    <!-- <script src="test.js"></script> -->
+    <ul id="expenseList" class="list-group mt-5"></ul>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+    integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="expense.js"></script>
+  <!-- <script src="test.js"></script> -->
 </body>
 
 </html>

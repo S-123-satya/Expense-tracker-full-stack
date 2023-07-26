@@ -1,8 +1,7 @@
 const express = require('express');
+const { postSignUpController } = require('../controllers/signupController');
 const router=express.Router();
 
-router.get('/',(req,res)=>{
-    res.json({message:'hello signup routes'});
-})
+router.post('/',postSignUpController)
 
 module.exports=router;

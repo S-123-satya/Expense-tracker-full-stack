@@ -1,11 +1,11 @@
 const url = 'http://localhost:3000';
 
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('UserId');
-const config={
+const config = {
     headers: {
-      Authorization: `${localStorage.getItem('UserId')}` //the token is a variable which holds the token
+        Authorization: `${localStorage.getItem('UserId')}` //the token is a variable which holds the token
     }
-   }
+}
 const saveExpense = (e) => {
     // e.preventDefault();
     console.log(e);
@@ -18,7 +18,7 @@ const saveExpense = (e) => {
         expenseInput: expenseInput.value,
         descriptionInput: descriptionInput.value,
         categoryInput: categoryInput.value,
-        UserId:localStorage.getItem(`UserId`)
+        UserId: localStorage.getItem(`UserId`)
     }
     console.log(obj);
 
@@ -34,23 +34,27 @@ const saveExpense = (e) => {
 
 }
 
-const display=(data)=>{
+const display = (data) => {
     console.log(data);
     const expenseList = document.getElementById('expenseList');
-    expenseList.innerHTML+=`<li id="`+`${data.id}`+`"> 
+    expenseList.innerHTML += `<li id="` + `${data.id}` + `"> 
     ${data.expenseInput} ${data.descriptionInput} ${data.categoryInput}
-    <button onclick="`+`delete('${data.id}')`+`">Delete</button>
+    <button onclick="`+ `delete('${data.id}')` + `">Delete</button>
     </li>`
-    
+
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
-    axios.get(`${url}/expensedata`,config)
-    .then(data=>{
-        console.log(data);
-        data.data.forEach(element => {
-            display(element);
-        });
-    })
-    .catch(err=>console.log(err));
+window.addEventListener('DOMContentLoaded', () => {
+    axios.get(`${url}/expense`, config)
+        .then(data => {
+            console.log(data);
+            const userLogin="Login"
+            const userName = document.getElementById('userName');
+            userName.innerHTML = `<button class="btn btn-success">${data.data.name ? data.data.name : userLogin}</button>`
+
+            data.data.forEach(element => {
+                display(element);
+            });
+        })
+        .catch(err => console.log(err));
 })

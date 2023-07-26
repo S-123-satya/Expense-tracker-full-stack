@@ -14,13 +14,20 @@ const save = (e) => {
     }
     console.log(obj);
 
-    axios.post(url, obj)
+    axios.post(`${url}/signup`, obj)
         .then(data => {
             console.log(data);
             if (data.data.name == 'SequelizeUniqueConstraintError') {
                 console.log('duplicate');
                 const showResult = document.getElementById('showResult');
                 showResult.innerHTML = 'User Already exist';
+            }
+            else{
+                // e.redirect('login.html')
+                alert(data.data.message);
+                localStorage.setItem("token",data.data.result.id)
+                const userName = document.getElementById('userName');
+                userName.innerHTML=`<button class="btn btn-success">${data.data.result.name}</button>`
             }
         })
         .catch(err => console.log(err));
@@ -43,13 +50,15 @@ const login = (e) => {
 
     axios.post(`${url}/login`, obj)
         .then(data => {
-            console.log(`data`+data.data);
+            console.log(`data` + data.data);
             console.log(data.data);
-            localStorage.setItem(`UserId`,`${data.data.userId}`)
+            localStorage.setItem(`UserId`, `${data.data.userId}`)
             if (data.data.email == obj.email) {
                 const showResult = document.getElementById('showResult');
                 showResult.innerHTML = 'User login successfully';
                 alert('user login successful')
+                const userName = document.getElementById('userName');
+                userName.innerHTML=`<button class="btn btn-success">${data.data.name}</button>`
             }
         })
         .catch(err => {
