@@ -52,7 +52,8 @@ const login = (e) => {
         .then(data => {
             console.log(`data` + data.data);
             console.log(data.data);
-            localStorage.setItem(`UserId`, `${data.data.userId}`)
+            localStorage.setItem(`UserId`, `${data.data.name}`)
+            localStorage.setItem(`token`, `${data.data.token}`)
             if (data.data.email == obj.email) {
                 const showResult = document.getElementById('showResult');
                 showResult.innerHTML = 'User login successfully';

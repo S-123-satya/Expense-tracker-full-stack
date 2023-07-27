@@ -3,7 +3,7 @@ const url = 'http://localhost:3000';
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('UserId');
 const config = {
     headers: {
-        Authorization: `${localStorage.getItem('UserId')}` //the token is a variable which holds the token
+        Authorization: `${localStorage.getItem('token')}` //the token is a variable which holds the token
     }
 }
 const saveExpense = (e) => {
@@ -18,11 +18,11 @@ const saveExpense = (e) => {
         expenseInput: expenseInput.value,
         descriptionInput: descriptionInput.value,
         categoryInput: categoryInput.value,
-        UserId: localStorage.getItem(`UserId`)
+        token: localStorage.getItem(`token`)
     }
     console.log(obj);
 
-    axios.post(`${url}/expense`, obj)
+    axios.post(`${url}/expense`,obj)
         .then(data => {
             console.log(data);
             display(data.data);
@@ -58,3 +58,26 @@ window.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.log(err));
 })
+
+
+
+/*check this for sending headers in post request 
+var postData = {
+    email: "test@test.com",
+    password: "password"
+  };
+  
+  let axiosConfig = {
+    headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+    }
+  };
+  
+  axios.post('http://<host>:<port>/<path>', postData, axiosConfig)
+  .then((res) => {
+    console.log("RESPONSE RECEIVED: ", res);
+  })
+  .catch((err) => {
+    console.log("AXIOS ERROR: ", err);
+  }) */
