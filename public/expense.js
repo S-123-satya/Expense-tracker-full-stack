@@ -22,7 +22,7 @@ const saveExpense = (e) => {
     }
     console.log(obj);
 
-    axios.post(`${url}/expense`,obj)
+    axios.post(`${url}/expense`, obj)
         .then(data => {
             console.log(data);
             display(data.data);
@@ -39,7 +39,7 @@ const display = (data) => {
     const expenseList = document.getElementById('expenseList');
     expenseList.innerHTML += `<li id="` + `${data.id}` + `"> 
     ${data.expenseInput} ${data.descriptionInput} ${data.categoryInput}
-    <button onclick="`+ `delete('${data.id}')` + `">Delete</button>
+    <button onclick="`+ `deleteExpense('${data.id}')` + `">Delete</button>
     </li>`
 
 }
@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
     axios.get(`${url}/expense`, config)
         .then(data => {
             console.log(data);
-            const userLogin="Login"
+            const userLogin = "Login"
             const userName = document.getElementById('userName');
             userName.innerHTML = `<button class="btn btn-success">${data.data.name ? data.data.name : userLogin}</button>`
 
@@ -58,6 +58,14 @@ window.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.log(err));
 })
+
+const deleteExpense=(id) => {
+    console.log(id);
+    document.getElementById(`${id}`).remove();
+    axios.delete(`${url}/expense/${id}`,config)
+    .then(res=>console.log(res))
+    .catch(err=>console.log(err));
+}
 
 
 

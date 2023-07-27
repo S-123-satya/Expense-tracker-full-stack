@@ -25,7 +25,8 @@ const save = (e) => {
             else{
                 // e.redirect('login.html')
                 alert(data.data.message);
-                localStorage.setItem("token",data.data.result.id)
+                localStorage.setItem("token",data.data.token)
+                localStorage.setItem("userName",data.data.name)
                 const userName = document.getElementById('userName');
                 userName.innerHTML=`<button class="btn btn-success">${data.data.result.name}</button>`
             }
@@ -52,7 +53,7 @@ const login = (e) => {
         .then(data => {
             console.log(`data` + data.data);
             console.log(data.data);
-            localStorage.setItem(`UserId`, `${data.data.name}`)
+            localStorage.setItem(`userName`, `${data.data.name}`)
             localStorage.setItem(`token`, `${data.data.token}`)
             if (data.data.email == obj.email) {
                 const showResult = document.getElementById('showResult');
