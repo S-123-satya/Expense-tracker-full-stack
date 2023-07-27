@@ -1,10 +1,11 @@
 const express = require('express');
-const { postExpenseController, getExpenseController } = require('../controllers/expenseControllers');
+const { postExpenseController, getExpenseController ,deleteExpenseController} = require('../controllers/expenseControllers');
 const router=express.Router();
 
 // for validata token
 const extractToken = (req, res, next) => {
     const token = req.headers['authorization'];
+    console.log('token extracted');
     if (typeof token !== "undefined") {
         req.token = token;
         next();
@@ -16,5 +17,6 @@ const extractToken = (req, res, next) => {
 // router.use(extractToken);
 router.get('/',extractToken,getExpenseController);
 router.post('/',postExpenseController);
+router.delete('/:id',extractToken, deleteExpenseController);
 
 module.exports=router;
