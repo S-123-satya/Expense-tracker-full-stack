@@ -14,7 +14,7 @@ module.exports.postExpenseController = (req, res) => {
             })
         }
         else {
-            req.body.UserId= data.user.userId
+            req.body.UserId = data.user.userId
             Expense.create(req.body)
                 .then(result => {
                     console.log(result);
@@ -54,8 +54,35 @@ module.exports.getExpenseController = (req, res) => {
                 .catch(err => console.log(err));
         }
     })
+};
 
-
+module.exports.deleteExpenseController = (req, res) => {
+    console.log(req.token);
+    console.log(req.body);
+    console.log(req.params.id);
+    jwt.verify(req.token, secretKey, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                message: 'invalid token'
+            })
+        }
+        else {
+            console.log(data);
+            console.log(data.UserId);
+            Expense.destroy({
+                where: {
+                    id: req.params.id,
+                    UserId: data.user.userId
+                }
+            })
+                .then(result => {
+                    console.log(result);
+                    res.json(result);
+                })
+                .catch(err => console.log(err));
+        }
+    })
 };
 
 // for validata token
