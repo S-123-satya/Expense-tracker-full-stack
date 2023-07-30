@@ -5,7 +5,7 @@ const Razorpay = require('razorpay');
 // 3. we create order for that instance and pass options and a callback function
 // 4. callback  funtion takes 2 args 1st one is err and 2nd one is order 
 //   ----> if not any err occur then we send order as a response
-module.exports.postPremiumController=(req,res)=>{
+module.exports.getPremiumController=(req,res)=>{
     let instance= new Razorpay({key_id:process.env.KEY_ID,key_secret:process.env.KEY_SECRET});
     let options={
         amount:2500,

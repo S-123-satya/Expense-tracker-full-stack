@@ -36,8 +36,8 @@
         <button id="premiumBtn" class="btn btn-primary">Update To Premium</button>
     </nav>
     <h2>Expense Tracker</h2>
-
-    <form id="expenseForm" onsubmit="saveExpense();return false;" class="mt-4">
+    <!-- onsubmit="saveExpense();return false;" -->
+    <form id="expenseForm"  class="mt-4">
       <div class="form-row">
         <div class=" mb-3">
           <label for="expenseInput">Expense</label>
@@ -60,7 +60,7 @@
           </select>
         </div>
         <div class="col-md-1 mb-3">
-          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="submit" id="addExpense" class="btn btn-primary">Add</button>
         </div>
       </div>
     </form>

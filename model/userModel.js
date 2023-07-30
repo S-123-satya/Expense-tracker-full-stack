@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../util/db');
 
 
@@ -11,18 +11,21 @@ const User = sequelize.define('User', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique:true
+    unique: true
   },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  
+  is_premium: {
+    type:DataTypes.BOOLEAN,
+    defaultValue:false
+  }
 }, {
   // Other model options go here
 });
 
-module.exports=User;
+module.exports = User;
 
 // `sequelize.define` also returns the model
 console.log(User === sequelize.models.User); // true

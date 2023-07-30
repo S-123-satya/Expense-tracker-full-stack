@@ -2,26 +2,22 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../util/db');
 
 
-const Expense = sequelize.define('Expense', {
+const Order = sequelize.define('order', {
   // Model attributes are defined here
-  expenseInput: {
+  order_id: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  descriptionInput: {
+  payment_id: {
     type: DataTypes.STRING,
-    allowNull: false,
   },
-  categoryInput: {
+  payment_sign: {
     type: DataTypes.STRING,
-    allowNull: false,
   },
+  payment_status:DataTypes.STRING,
   
 }, {
   // Other model options go here
 });
 
-module.exports=Expense;
-
-// `sequelize.define` also returns the model
-// console.log(User === sequelize.models.User); // true
+module.exports=Order;

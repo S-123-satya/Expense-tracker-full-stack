@@ -1,7 +1,7 @@
 const express = require('express');
-const { postPremiumController } = require('../controllers/premiumController');
+const { getPremiumController } = require('../controllers/premiumController');
 const router=express.Router();
 
-router.get('/',postPremiumController)
+router.get('/',getPremiumController)
 
 module.exports=router;

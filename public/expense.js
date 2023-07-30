@@ -93,3 +93,6 @@ premium.addEventListener('click',(e)=>{
     })
     .catch(err=>console.log(err));
 });
+
+const addExpense = document.getElementById('addExpense');
+addExpense.addEventListener('click',saveExpense);

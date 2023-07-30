@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const User = require('../model/dbmodel');
+const User = require('../model/userModel');
 
 const secretKey = "secretKey";
 
@@ -38,7 +38,6 @@ module.exports.postLoginController = (req, res) => {
                         // res.json({ name: result[0].dataValues.name, userId: result[0].dataValues.id, email: result[0].dataValues.email });
                     }
                     else {
-                        console.log(hash);
                         console.log(`password not matched`);
                         res.status(401);
                         res.json({ name: "user password is not correct" });
