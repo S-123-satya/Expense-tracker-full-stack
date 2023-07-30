@@ -77,6 +77,7 @@ const handleOpenRazorpay=(data)=>{
         handler:function (response){
             console.log(`handler`);
             console.log(response);
+            axios.post(`${url}/premium`,response,config)
         }
     }
     let rzy= new Razorpay(options);
