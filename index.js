@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const dotenv = require('dotenv').config();
 
 const User = require('./model/dbmodel');
 const Expense = require('./model/expensemodel');
@@ -8,6 +9,7 @@ const sequelize = require('./util/db');
 const signupRoutes = require('./routes/signupRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const loginRoutes = require('./routes/loginRoutes');
+const premiumRoutes = require('./routes/premiumRoutes');
 
 const app = express();
 
@@ -29,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/signup', signupRoutes);
 app.use('/login', loginRoutes);
 app.use('/expense', expenseRoutes);
+app.use('/premium', premiumRoutes);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

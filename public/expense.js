@@ -7,7 +7,7 @@ const config = {
     }
 }
 const saveExpense = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     console.log(e);
     console.log(Object.keys(localStorage)[0]);
     console.log('hello');
@@ -67,25 +67,29 @@ const deleteExpense=(id) => {
     .catch(err=>console.log(err));
 }
 
-
-
-/*check this for sending headers in post request 
-var postData = {
-    email: "test@test.com",
-    password: "password"
-  };
-  
-  let axiosConfig = {
-    headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        "Access-Control-Allow-Origin": "*",
+const handleOpenRazorpay=(data)=>{
+    console.log(data);
+    let options={
+        key_id:"xyz",
+        amount:50000,
+        currency:"INR",
+        order_id:data.id,
+        handler:function (response){
+            console.log(`handler`);
+            console.log(response);
+        }
     }
-  };
-  
-  axios.post('http://<host>:<port>/<path>', postData, axiosConfig)
-  .then((res) => {
-    console.log("RESPONSE RECEIVED: ", res);
-  })
-  .catch((err) => {
-    console.log("AXIOS ERROR: ", err);
-  }) */
+    let rzy= new Razorpay(options);
+    rzy.open();
+}
+
+const premium=document.getElementById('premiumBtn');
+premium.addEventListener('click',(e)=>{
+    e.preventDefault();
+    axios.get(`${url}/premium`,config)
+    .then(response=>{
+        console.log(response);
+        handleOpenRazorpay(response.data.order);
+    })
+    .catch(err=>console.log(err));
+});
