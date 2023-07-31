@@ -2,27 +2,7 @@
 
 const url = 'http://localhost:3000';
 
-const dashboardBtn = document.getElementById('dashboardBtn');
-const token = localStorage.getItem('token');
-const premiumStatus = localStorage.getItem('isPremium');
-if (token == undefined || token == '' || token == null) {
-    alert("Yoe are not login, Please login first to add Expense");
-    window.location = `${url}/login.html`;
-}
-else {
-    const name = localStorage.getItem('userName')
-    const userName = document.getElementById('userName');
-    userName.innerHTML = `<h3 class=" bg-success m-1 p-3 rounded">${name.toUpperCase()}</h3>
-    <button type="button" id="logout" class="btn btn-outline-danger">Logout</button>`
-}
-if (premiumStatus===true) {
-    const isPremium = document.getElementById('isPremium');
-    console.log(isPremium);
-    isPremium.innerHTML = "<p>You are a premium user now</p>";
-    dashboardBtn.className='btn btn-success'
-    
-    
-}
+
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('UserId');
 const config = {
     headers: {
@@ -68,16 +48,38 @@ const display = (data) => {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+
     const token = localStorage.getItem('token');
-    if (token != undefined || token != '') {
+    if (token !== null) {
         axios.get(`${url}/expense`, config)
             .then(data => {
                 console.log(data);
-                data.data.forEach(element => {
-                    display(element);
-                });
+                if (data.data.length() > 0)
+                    data.data.forEach(element => {
+                        display(element);
+                    });
             })
             .catch(err => console.log(err));
+    }
+    const dashboardBtn = document.getElementById('dashboardBtn');
+    const premiumStatus = localStorage.getItem('isPremium');
+    console.log(premiumStatus);
+    if (premiumStatus) {
+        const isPremium = document.getElementById('isPremium');
+        console.log(typeof isPremium);
+        isPremium.innerHTML = "<p>You are a premium user now</p>";
+        dashboardBtn.className = 'btn btn-success'
+    }
+    if (token == undefined || token == '' || token == null) {
+        alert("Yoe are not login, Please login first to add Expense");
+        window.location = `${url}/login.html`;
+    }
+    else {
+        const name = localStorage.getItem('userName')
+        const userName = document.getElementById('userName');
+        userName.innerHTML = `<h3 class=" bg-success m-1 p-3 rounded">${name.toUpperCase()}</h3>`
+        const logout = document.getElementById('logout');
+        logout.innerHTML = `<button type="button" id="logout" class="btn btn-outline-danger">Logout</button>`
     }
 
 })
@@ -141,7 +143,19 @@ if (premium != null) {
 }
 const addExpense = document.getElementById('addExpense');
 addExpense.addEventListener('click', saveExpense);
+const displayUsers=(data)=>{
+    // console.log(data);
+    const listOfUses = document.getElementById('listOfUses');
+    listOfUses.innerHTML+=`<li> ${data.name} : ${data.expense}`
+    
+}
+dashboardBtn.addEventListener('click', async () => {
+    try {
+        const data =await axios.get(`${url}/premium/dashboard`,config);
+        // console.log(data.data.data);
+        data.data.data.forEach(element=>displayUsers(element));
+    }
+    catch {
 
-dashboardBtn.addEventListener('click',()=>{
-    console.log(`hii`);
+    }
 });
