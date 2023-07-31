@@ -74,15 +74,39 @@ module.exports.postPremiumController = (req, res) => {
                 console.log(data.UserId);
                 User.update({
                     is_premium: true
-                    },
+                },
                     {
                         where: {
                             id: data.user.userId
                         }
                     })
                     .then(result => {
+                        console.log(`after update`);
                         console.log(result);
-                        res.json({ message: "Premium User" });
+                        // generate jwt token with id and isPremirum
+                        User.findOne({
+                            where: {
+                                id: data.user.userId
+                            }
+                        })
+                            .then(result1 => {
+                                console.log(`after fetch`);
+                                console.log(result1);
+                                console.log(result1.dataValues);
+                                const user = {
+                                    userId: result1.dataValues.id,
+                                    is_premium: result1.dataValues.is_premium
+                                }
+                                jwt.sign({ user }, secretKey, (err, token) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    else {
+                                        return res.json({ name: result1.dataValues.name, token ,is_premium:true})
+                                    }
+                                })
+                            })
+                        // res.json({ message: "Premium User" });
                     })
                     .catch(err => console.log(err));
             }

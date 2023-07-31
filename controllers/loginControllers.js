@@ -25,14 +25,15 @@ module.exports.postLoginController = (req, res) => {
                         console.log(result[0].dataValues);
                         // generating token when user is login with post request 
                         const user = {
-                            userId: result[0].dataValues.id
+                            userId: result[0].dataValues.id,
+                        is_premium:result[0].dataValues.is_premium
                         }
-                        jwt.sign({ user }, secretKey, { expiresIn: '10000s' }, (err, token) => {
+                        jwt.sign({ user }, secretKey, (err, token) => {
                             if (err) {
                                 console.log(err);
                             }
                             else {
-                                res.json({ name:result[0].dataValues.name,token })
+                                res.json({ name:result[0].dataValues.name,token,is_premium:result[0].dataValues.is_premium })
                             }
                         })
                         // res.json({ name: result[0].dataValues.name, userId: result[0].dataValues.id, email: result[0].dataValues.email });

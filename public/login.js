@@ -55,6 +55,7 @@ const login = (e) => {
             console.log(data.data);
             localStorage.setItem(`userName`, `${data.data.name}`)
             localStorage.setItem(`token`, `${data.data.token}`)
+            localStorage.setItem(`isPremium`, `${data.data.is_premium}`)
                 const showResult = document.getElementById('showResult');
                 showResult.innerHTML = 'User login successfully';
                 alert('user login successful');

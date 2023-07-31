@@ -19,13 +19,14 @@ module.exports.postSignUpController = (req, res) => {
                     console.log(result.dataValues.id);
                     const user = {
                         userId: result.dataValues.id,
+                        is_premium:result.dataValues.is_premium
                     }
-                    jwt.sign({ user }, secretKey, { expiresIn: '1000s' }, (err, token) => {
+                    jwt.sign({ user }, secretKey,  (err, token) => {
                         if (err) {
                             console.log(err);
                         }
                         else {
-                            res.json({ message: "User login Succesfully",token, name: result.dataValues.name });
+                            res.json({ message: "User login Succesfully",token, name: result.dataValues.name ,is_premium:result[0].dataValues.is_premium});
                         }
                     })
 
