@@ -5,7 +5,7 @@ const sequelize = require('../util/db');
 const Expense = sequelize.define('Expense', {
   // Model attributes are defined here
   expenseInput: {
-    type: DataTypes.STRING,
+    type: DataTypes.BIGINT,
     allowNull: false
   },
   descriptionInput: {
