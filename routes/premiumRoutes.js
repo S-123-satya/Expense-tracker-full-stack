@@ -1,6 +1,6 @@
 const express = require('express');
-const { getPremiumController,postPremiumController } = require('../controllers/premiumController');
-const router=express.Router();
+const { getPremiumController, postPremiumController, getDashboardController } = require('../controllers/premiumController');
+const router = express.Router();
 
 const extractToken = (req, res, next) => {
     const token = req.headers['authorization'];
@@ -14,7 +14,8 @@ const extractToken = (req, res, next) => {
     }
 }
 
-router.get('/',getPremiumController)
-router.post('/',extractToken,postPremiumController)
+router.get('/', getPremiumController)
+router.post('/', extractToken, postPremiumController)
+router.get('/dashboard', extractToken, getDashboardController)
 
-module.exports=router;
+module.exports = router;

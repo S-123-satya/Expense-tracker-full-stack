@@ -3,6 +3,7 @@ const Order = require('./../model/orderModel');
 const User = require('./../model/userModel');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const Expense = require('../model/expensemodel');
 const secretKey = "secretKey";
 
 // create an instance of razorpay in which we pass keyid and secertkey
@@ -102,7 +103,7 @@ module.exports.postPremiumController = (req, res) => {
                                         console.log(err);
                                     }
                                     else {
-                                        return res.json({ name: result1.dataValues.name, token ,is_premium:true})
+                                        return res.json({ name: result1.dataValues.name, token, is_premium: true })
                                     }
                                 })
                             })
@@ -115,4 +116,28 @@ module.exports.postPremiumController = (req, res) => {
     else
         return res.json({ success: false, message: "Payment verification failed" })
 
+}
+module.exports.getDashboardController = async (req, res) => {
+    const expenses = await Expense.findAll();
+    const user = await User.findAll();
+    // user.map()
+    console.log(user);
+    const amount = {};
+    expenses.forEach(expense => {
+        if (amount[expense.UserId]) {
+            amount[expense.UserId] += expense.expenseInput;
+        }
+        else
+            amount[expense.UserId] = expense.expenseInput;
+    })
+    const data = [];
+    user.forEach(obj => {
+        data.push({ name: obj.name, expense: amount[obj.id] || 0 })
+    });
+    console.log(data);
+    console.log(amount);
+    const d = data.sort((a, b) => b.expense - a.expense);
+    console.log(data);
+    console.log(d);
+    res.json({ data: d });
 }
