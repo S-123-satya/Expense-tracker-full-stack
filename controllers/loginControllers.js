@@ -19,6 +19,7 @@ module.exports.postLoginController = (req, res) => {
                 res.status(404);
                 res.json({ name: "user does not Exists" });
             }
+            else{
             bcrypt.compare(req.body.password, result[0].dataValues.password)
                 .then(function (resu) {
                     if (resu === true) {
@@ -44,7 +45,7 @@ module.exports.postLoginController = (req, res) => {
                         res.json({ name: "user password is not correct" });
                     }
                 });
-
+            }
             console.log(`result`);
             console.log(result);
         })

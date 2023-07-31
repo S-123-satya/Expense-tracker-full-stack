@@ -27,8 +27,8 @@ const save = (e) => {
                 alert(data.data.message);
                 localStorage.setItem("token", data.data.token)
                 localStorage.setItem("userName", data.data.name)
-                const userName = document.getElementById('userName');
-                userName.innerHTML = `<button class="btn btn-success">${data.data.result.name}</button>`
+                localStorage.setItem("isPremium", data.data.is_premium)
+                window.location = `${url}/expense.html`
             }
         })
         .catch(err => console.log(err));
@@ -56,12 +56,12 @@ const login = (e) => {
             localStorage.setItem(`userName`, `${data.data.name}`)
             localStorage.setItem(`token`, `${data.data.token}`)
             localStorage.setItem(`isPremium`, `${data.data.is_premium}`)
-                const showResult = document.getElementById('showResult');
-                showResult.innerHTML = 'User login successfully';
-                alert('user login successful');
-                window.location = `${url}/expense.html`;
-                email.value = '';
-                password.value = '';
+            const showResult = document.getElementById('showResult');
+            showResult.innerHTML = 'User login successfully';
+            alert('user login successful');
+            window.location = `${url}/expense.html`;
+            email.value = '';
+            password.value = '';
         })
         .catch(err => {
             console.log(err);

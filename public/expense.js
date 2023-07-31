@@ -1,5 +1,8 @@
+// const e = require("cors");
+
 const url = 'http://localhost:3000';
 
+const dashboardBtn = document.getElementById('dashboardBtn');
 const token = localStorage.getItem('token');
 const premiumStatus = localStorage.getItem('isPremium');
 if (token == undefined || token == '' || token == null) {
@@ -12,10 +15,13 @@ else {
     userName.innerHTML = `<h3 class=" bg-success m-1 p-3 rounded">${name.toUpperCase()}</h3>
     <button type="button" id="logout" class="btn btn-outline-danger">Logout</button>`
 }
-if (premiumStatus) {
+if (premiumStatus===true) {
     const isPremium = document.getElementById('isPremium');
     console.log(isPremium);
     isPremium.innerHTML = "<p>You are a premium user now</p>";
+    dashboardBtn.className='btn btn-success'
+    
+    
 }
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('UserId');
 const config = {
@@ -81,6 +87,7 @@ const logoutUser = () => {
     logout.addEventListener('click', () => {
         localStorage.removeItem('userName');
         localStorage.removeItem('token');
+        localStorage.removeItem('isPremium');
         alert("You are successfully logout")
         location = `${url}/login.html`
     });
@@ -121,15 +128,20 @@ const handleOpenRazorpay = (data) => {
 }
 
 const premium = document.getElementById('premiumBtn');
-premium.addEventListener('click', (e) => {
-    e.preventDefault();
-    axios.get(`${url}/premium`, config)
-        .then(response => {
-            console.log(response);
-            handleOpenRazorpay(response.data.order);
-        })
-        .catch(err => console.log(err));
-});
-
+if (premium != null) {
+    premium.addEventListener('click', (e) => {
+        e.preventDefault();
+        axios.get(`${url}/premium`, config)
+            .then(response => {
+                console.log(response);
+                handleOpenRazorpay(response.data.order);
+            })
+            .catch(err => console.log(err));
+    });
+}
 const addExpense = document.getElementById('addExpense');
 addExpense.addEventListener('click', saveExpense);
+
+dashboardBtn.addEventListener('click',()=>{
+    console.log(`hii`);
+});

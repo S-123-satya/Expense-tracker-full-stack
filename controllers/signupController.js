@@ -26,8 +26,14 @@ module.exports.postSignUpController = (req, res) => {
                             console.log(err);
                         }
                         else {
-                            res.json({ message: "User login Succesfully",token, name: result.dataValues.name ,is_premium:result[0].dataValues.is_premium});
+                            console.log('successful encry');
+                            res.json({ 
+                                message: "User login Succesfully",
+                                token,
+                                name: result.dataValues.name,
+                                is_premium:result.dataValues.is_premium});
                         }
+                        return;
                     })
 
                 })
@@ -35,6 +41,10 @@ module.exports.postSignUpController = (req, res) => {
                     console.log(err)
                     res.send(err);
                 });
+        })
+        .catch(err=>{
+            console.log(err);
+            return res.end();
         });
 };
 
