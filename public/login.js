@@ -22,13 +22,13 @@ const save = (e) => {
                 const showResult = document.getElementById('showResult');
                 showResult.innerHTML = 'User Already exist';
             }
-            else{
+            else {
                 // e.redirect('login.html')
                 alert(data.data.message);
-                localStorage.setItem("token",data.data.token)
-                localStorage.setItem("userName",data.data.name)
+                localStorage.setItem("token", data.data.token)
+                localStorage.setItem("userName", data.data.name)
                 const userName = document.getElementById('userName');
-                userName.innerHTML=`<button class="btn btn-success">${data.data.result.name}</button>`
+                userName.innerHTML = `<button class="btn btn-success">${data.data.result.name}</button>`
             }
         })
         .catch(err => console.log(err));
@@ -55,20 +55,29 @@ const login = (e) => {
             console.log(data.data);
             localStorage.setItem(`userName`, `${data.data.name}`)
             localStorage.setItem(`token`, `${data.data.token}`)
-            if (data.data.email == obj.email) {
                 const showResult = document.getElementById('showResult');
                 showResult.innerHTML = 'User login successfully';
-                alert('user login successful')
-                const userName = document.getElementById('userName');
-                userName.innerHTML=`<button class="btn btn-success">${data.data.name}</button>`
-            }
+                alert('user login successful');
+                window.location = `${url}/expense.html`;
+                email.value = '';
+                password.value = '';
         })
         .catch(err => {
             console.log(err);
             const showResult = document.getElementById('showResult');
             showResult.innerHTML = err.response.data.name;
         });
-    email.value = '';
-    password.value = '';
+
 
 }
+// login();
+
+window.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (token == undefined || token == '' || token == null) {
+    }
+    else {
+        alert("You are already login")
+        window.location = `${url}/expense.html`;
+    }
+})
