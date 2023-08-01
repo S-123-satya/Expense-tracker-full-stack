@@ -32,10 +32,15 @@ module.exports.postExpenseController = (req, res) => {
             })
                 .then(result => {
                     console.log(`res  data ex`);
-                    console.log(result.dataValues.total_expenses);
-                    console.log(result.total_expenses);
-                    let sum=Number.parseInt(req.body.expenseInpute) +Number.parseInt(result[0].dataValues.total_expenses);
-                    console.log(req.body.expenseInpute);
+                    console.log(result);
+                    // res.json(result)
+                    console.log(result[0].total_expenses);
+                    console.log(Number.parseInt(result[0].total_expenses));
+                    let sum=Number.parseInt(req.body.expenseInput) +Number.parseInt(result[0].total_expenses);
+                    console.log(req.body.expenseInput);
+                    console.log(`sum--`);
+                    console.log(sum);
+                    console.log(req.body);
                     User.update(
                         { total_expenses: sum },
                         { where: { id: req.body.UserId } }

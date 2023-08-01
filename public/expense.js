@@ -64,7 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const dashboardBtn = document.getElementById('dashboardBtn');
     const premiumStatus = localStorage.getItem('isPremium');
     console.log(premiumStatus);
-    if (premiumStatus=="true") {
+    if (premiumStatus == "true") {
         const isPremium = document.getElementById('isPremium');
         console.log(typeof isPremium);
         isPremium.innerHTML = "<p>You are a premium user now</p>";
@@ -143,17 +143,18 @@ if (premium != null) {
 }
 const addExpense = document.getElementById('addExpense');
 addExpense.addEventListener('click', saveExpense);
-const displayUsers=(data)=>{
+const displayUsers = (data) => {
     console.log(data);
     const listOfUses = document.getElementById('listOfUses');
-    listOfUses.innerHTML+=`<li> ${data.name} : ${data.totalcost||0}`
-    
+    listOfUses.innerHTML += `<li> ${data.name} : ${data.totalcost || 0}`
+
 }
 dashboardBtn.addEventListener('click', async () => {
     try {
-        const data =await axios.get(`${url}/premium/dashboard`,config);
+        const data = await axios.get(`${url}/premium/dashboard`, config);
         console.log(data.data.data);
-        data.data.data.forEach(element=>displayUsers(element));
+        document.getElementById('listOfUses').innerHTML = '';
+        data.data.data.forEach(element => displayUsers(element));
     }
     catch {
 
