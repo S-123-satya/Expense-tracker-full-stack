@@ -4,6 +4,7 @@ const User = require('./../model/userModel');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const Expense = require('../model/expensemodel');
+const { Sequelize } = require('sequelize');
 const secretKey = "secretKey";
 
 // create an instance of razorpay in which we pass keyid and secertkey
@@ -118,10 +119,13 @@ module.exports.postPremiumController = (req, res) => {
 
 }
 module.exports.getDashboardController = async (req, res) => {
-    const expenses = await Expense.findAll();
     const user = await User.findAll();
-    // user.map()
-    console.log(user);
+    const expenses = await Expense.findAll({
+        attributes:['UserId',[Sequelize.fn('sum',Sequelize.col(`expenseInput`)),'totalcost']],
+        group:'UserId',
+    });
+    console.log(`expenses`);
+    console.log(expenses);
     const amount = {};
     expenses.forEach(expense => {
         if (amount[expense.UserId]) {
