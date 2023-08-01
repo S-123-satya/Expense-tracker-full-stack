@@ -20,7 +20,11 @@ const User = sequelize.define('User', {
   is_premium: {
     type:DataTypes.BOOLEAN,
     defaultValue:false
-  }
+  },
+    total_expenses:{
+      type:DataTypes.BIGINT,
+      defaultValue:0
+  },
 }, {
   // Other model options go here
 });

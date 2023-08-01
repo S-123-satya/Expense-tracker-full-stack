@@ -54,7 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
         axios.get(`${url}/expense`, config)
             .then(data => {
                 console.log(data);
-                if (data.data.length() > 0)
+                if (data.data.length > 0)
                     data.data.forEach(element => {
                         display(element);
                     });
@@ -64,7 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const dashboardBtn = document.getElementById('dashboardBtn');
     const premiumStatus = localStorage.getItem('isPremium');
     console.log(premiumStatus);
-    if (premiumStatus) {
+    if (premiumStatus=="true") {
         const isPremium = document.getElementById('isPremium');
         console.log(typeof isPremium);
         isPremium.innerHTML = "<p>You are a premium user now</p>";

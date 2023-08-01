@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Expense = require("../model/expensemodel");
+const User = require('../model/userModel');
 
 const secretKey = "secretKey";
 
@@ -24,6 +25,26 @@ module.exports.postExpenseController = (req, res) => {
                     console.log(err)
                     res.send(err);
                 });
+            User.findAll({
+                where: {
+                    id: req.body.UserId
+                }
+            })
+                .then(result => {
+                    console.log(`res  data ex`);
+                    console.log(result.dataValues.total_expenses);
+                    console.log(result.total_expenses);
+                    let sum=Number.parseInt(req.body.expenseInpute) +Number.parseInt(result[0].dataValues.total_expenses);
+                    console.log(req.body.expenseInpute);
+                    User.update(
+                        { total_expenses: sum },
+                        { where: { id: req.body.UserId } }
+                    )
+                        .then(result => console.log(result))
+                        .catch(err => console.log(err))
+                })
+                .catch(err => console.log(err))
+
         }
     })
 };
