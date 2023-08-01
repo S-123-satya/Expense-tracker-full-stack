@@ -144,15 +144,15 @@ if (premium != null) {
 const addExpense = document.getElementById('addExpense');
 addExpense.addEventListener('click', saveExpense);
 const displayUsers=(data)=>{
-    // console.log(data);
+    console.log(data);
     const listOfUses = document.getElementById('listOfUses');
-    listOfUses.innerHTML+=`<li> ${data.name} : ${data.expense}`
+    listOfUses.innerHTML+=`<li> ${data.name} : ${data.totalcost||0}`
     
 }
 dashboardBtn.addEventListener('click', async () => {
     try {
         const data =await axios.get(`${url}/premium/dashboard`,config);
-        // console.log(data.data.data);
+        console.log(data.data.data);
         data.data.data.forEach(element=>displayUsers(element));
     }
     catch {
