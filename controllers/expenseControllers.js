@@ -43,6 +43,7 @@ module.exports.postExpenseController = async (req, res) => {
                     })
                 console.log(wait_user_update)
                 await t.commit();
+                res.json({data:wait_result})
             }
         } catch (error) {
             console.log(error);

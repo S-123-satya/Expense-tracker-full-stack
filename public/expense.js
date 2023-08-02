@@ -28,7 +28,7 @@ const saveExpense = (e) => {
     axios.post(`${url}/expense`, obj)
         .then(data => {
             console.log(data);
-            display(data.data);
+            display(data.data.data);
         })
         .catch(err => console.log(err));
     expenseInput.value = '';
