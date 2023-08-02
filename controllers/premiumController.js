@@ -4,7 +4,7 @@ const User = require('./../model/userModel');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const Expense = require('../model/expensemodel');
-const { Sequelize } = require('sequelize');
+const sequelize = require('../util/db');
 const secretKey = "secretKey";
 
 // create an instance of razorpay in which we pass keyid and secertkey
@@ -30,7 +30,8 @@ module.exports.getPremiumController = (req, res) => {
     });
 }
 
-module.exports.postPremiumController = (req, res) => {
+module.exports.postPremiumController = async(req, res) => {
+    const t = await sequelize.transaction();
     console.log(req.body);
     // STEP 1: Receive Payment Data
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
@@ -58,12 +59,19 @@ module.exports.postPremiumController = (req, res) => {
             } /* set attributes' value */,
             {
                 where: {
-                    order_id: req.body.razorpay_order_id
+                    order_id: req.body.razorpay_order_id,
+                    transaction:t
                 }
             } /* where criteria */
         )
-            .then(result => console.log(result))
-            .catch(err => console.log(err))
+            .then(async result =>{
+                 console.log(result)
+                await t.commit()
+            })
+            .catch(async err => {
+                console.log(err)
+               await t.rollback()
+            })
         jwt.verify(req.token, secretKey, (err, data) => {
             if (err) {
                 console.log(err);
@@ -79,7 +87,8 @@ module.exports.postPremiumController = (req, res) => {
                 },
                     {
                         where: {
-                            id: data.user.userId
+                            id: data.user.userId,
+                            transaction:t
                         }
                     })
                     .then(result => {
@@ -88,10 +97,11 @@ module.exports.postPremiumController = (req, res) => {
                         // generate jwt token with id and isPremirum
                         User.findOne({
                             where: {
-                                id: data.user.userId
+                                id: data.user.userId,
+                                transaction:t,
                             }
                         })
-                            .then(result1 => {
+                            .then(async result1 => {
                                 console.log(`after fetch`);
                                 console.log(result1);
                                 console.log(result1.dataValues);
@@ -107,10 +117,20 @@ module.exports.postPremiumController = (req, res) => {
                                         return res.json({ name: result1.dataValues.name, token, is_premium: true })
                                     }
                                 })
+                                await t.commit();
                             })
+                            .catch(async err =>{
+                                console.log(err);
+                                await t.rollback();
+                            
+                            } )
                         // res.json({ message: "Premium User" });
                     })
-                    .catch(err => console.log(err));
+                    .catch(async err =>{
+                        console.log(err);
+                        await t.rollback();
+                    
+                    } )
             }
         })
     }

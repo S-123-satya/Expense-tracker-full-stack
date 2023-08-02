@@ -1,55 +1,52 @@
 const jwt = require('jsonwebtoken');
 const Expense = require("../model/expensemodel");
 const User = require('../model/userModel');
+const sequelize = require('../util/db');
 
 const secretKey = "secretKey";
 
-module.exports.postExpenseController = (req, res) => {
+module.exports.postExpenseController = async (req, res) => {
+    const t = await sequelize.transaction();
     console.log(req.body);
     req.token = req.body.token;
-    jwt.verify(req.token, secretKey, (err, data) => {
-        if (err) {
-            console.log(err);
-            res.json({
-                message: 'invalid token'
-            })
-        }
-        else {
-            req.body.UserId = data.user.userId
-            Expense.create(req.body)
-                .then(result => {
-                    console.log(result);
-                    res.json(result);
+    jwt.verify(req.token, secretKey, async (err, data) => {
+        try {
+            if (err) {
+                console.log(err);
+                res.json({
+                    message: 'invalid token'
                 })
-                .catch(err => {
-                    console.log(err)
-                    res.send(err);
-                });
-            User.findAll({
-                where: {
-                    id: req.body.UserId
-                }
-            })
-                .then(result => {
-                    console.log(`res  data ex`);
-                    console.log(result);
-                    // res.json(result)
-                    console.log(result[0].total_expenses);
-                    console.log(Number.parseInt(result[0].total_expenses));
-                    let sum=Number.parseInt(req.body.expenseInput) +Number.parseInt(result[0].total_expenses);
-                    console.log(req.body.expenseInput);
-                    console.log(`sum--`);
-                    console.log(sum);
-                    console.log(req.body);
-                    User.update(
-                        { total_expenses: sum },
-                        { where: { id: req.body.UserId } }
-                    )
-                        .then(result => console.log(result))
-                        .catch(err => console.log(err))
+            }
+            else {
+                req.body.UserId = data.user.userId
+                let wait_result = await Expense.create(req.body, { transaction: t })
+                let wait_user_result = await User.findAll({
+                    where: {
+                        id: req.body.UserId
+                    }
                 })
-                .catch(err => console.log(err))
-
+                console.log(`res  data ex`);
+                console.log(wait_user_result);
+                console.log(wait_user_result[0].total_expenses);
+                console.log(Number.parseInt(wait_user_result[0].total_expenses));
+                let sum = Number.parseInt(req.body.expenseInput) + Number.parseInt(wait_user_result[0].total_expenses);
+                console.log(req.body.expenseInput);
+                console.log(`sum--`);
+                console.log(sum);
+                console.log(req.body);
+                let wait_user_update = await User.update(
+                    { total_expenses: sum },
+                    {
+                        where: {
+                            id: req.body.UserId,
+                        },transaction: t 
+                    })
+                console.log(wait_user_update)
+                await t.commit();
+            }
+        } catch (error) {
+            console.log(error);
+            await t.rollback();
         }
     })
 };
