@@ -39,11 +39,11 @@ module.exports.postExpenseController = async (req, res) => {
                     {
                         where: {
                             id: req.body.UserId,
-                        },transaction: t 
+                        }, transaction: t
                     })
                 console.log(wait_user_update)
                 await t.commit();
-                res.json({data:wait_result})
+                res.json({ data: wait_result })
             }
         } catch (error) {
             console.log(error);
@@ -82,29 +82,46 @@ module.exports.getExpenseController = (req, res) => {
 
 module.exports.deleteExpenseController = (req, res) => {
     console.log(req.token);
-    console.log(req.body);
     console.log(req.params.id);
-    jwt.verify(req.token, secretKey, (err, data) => {
-        if (err) {
-            console.log(err);
-            res.json({
-                message: 'invalid token'
-            })
-        }
-        else {
-            console.log(data);
-            console.log(data.UserId);
-            Expense.destroy({
-                where: {
-                    id: req.params.id,
-                    UserId: data.user.userId
-                }
-            })
-                .then(result => {
-                    console.log(result);
-                    res.json(result);
+    jwt.verify(req.token, secretKey, async (err, data) => {
+        const t = await sequelize.transaction();
+        try {
+            if (err) {
+                console.log(err);
+                res.json({
+                    message: 'invalid token'
                 })
-                .catch(err => console.log(err));
+            }
+            else {
+                const delete_data_expense= await Expense.findAll({where:{id: req.params.id,UserId: data.user.userId}})
+                const delete_data = await Expense.destroy({
+                    where: {
+                        id: req.params.id,
+                        UserId: data.user.userId
+                    }, transaction: t
+                })
+                let wait_user_result = await User.findAll({
+                    where: {
+                        id: data.user.userId
+                    }
+                })
+                let sum = Number.parseInt(wait_user_result[0].total_expenses) - Number.parseInt(delete_data_expense[0].expenseInput);
+                console.log(sum);
+                let wait_user_update_expense = await User.update(
+                    { total_expenses: sum },
+                    {
+                        where: {
+                            id: data.user.userId,
+                        }, transaction: t
+                    })
+                console.log(`wait_user_update_expense`);
+                console.log(wait_user_update_expense);
+                res.json(delete_data);
+                t.commit();
+            }
+        } catch (error) {
+            console.log(error);
+            t.rollback();
         }
     })
 };

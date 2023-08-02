@@ -146,7 +146,7 @@ module.exports.getDashboardController = async (req, res) => {
                 attributes:[]
             }
         ],
-        attributes:['name',[Sequelize.fn('sum',Sequelize.col(`expenses.expenseInput`)),'totalcost']],
+        attributes:['name',[sequelize.fn('sum',sequelize.col(`expenses.expenseInput`)),'totalcost']],
         group:['id'],
         order:[['totalcost','DESC']]
     });
