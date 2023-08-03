@@ -12,6 +12,7 @@ const loginRoutes = require('./routes/loginRoutes');
 const premiumRoutes = require('./routes/premiumRoutes');
 const forgetRoutes = require('./routes/forgetRoutes');
 const Order = require('./model/orderModel');
+const ForgotUser = require('./model/ForgotPasswordRequestsModel');
 
 const app = express();
 
@@ -35,6 +36,29 @@ app.use('/login', loginRoutes);
 app.use('/expense', expenseRoutes);
 app.use('/premium', premiumRoutes);
 app.use('/password',forgetRoutes);
+app.post('/updatepassword',async (req,res)=>{
+    console.log(req.body);
+    const {password,uuid}=req.body;
+    const arr=uuid.split('/');
+    console.log(arr[arr.length-1]);
+    const result=await ForgotUser.findOne(
+        {where:
+            {
+                uuid:arr[arr.length-1],
+                isActive:true,
+            }
+        });
+    console.log(result);
+    if(result!==null){
+        res.json({message:'maine to apna kaam kar diya'})
+    }
+    
+    // res.json({message:"reset successful"});
+})
+
+User.hasMany(ForgotUser);
+ForgotUser.belongsTo(User);
+
 User.hasMany(Expense);
 Expense.belongsTo(User);
 
