@@ -60,8 +60,8 @@ module.exports.postPremiumController = async(req, res) => {
             {
                 where: {
                     order_id: req.body.razorpay_order_id,
-                    transaction:t
-                }
+                    
+                },transaction:t
             } /* where criteria */
         )
             .then(async result =>{
@@ -88,8 +88,8 @@ module.exports.postPremiumController = async(req, res) => {
                     {
                         where: {
                             id: data.user.userId,
-                            transaction:t
-                        }
+                            
+                        },transaction:t
                     })
                     .then(result => {
                         console.log(`after update`);
@@ -98,7 +98,6 @@ module.exports.postPremiumController = async(req, res) => {
                         User.findOne({
                             where: {
                                 id: data.user.userId,
-                                transaction:t,
                             }
                         })
                             .then(async result1 => {

@@ -69,6 +69,13 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(typeof isPremium);
         isPremium.innerHTML = "<p>You are a premium user now</p>";
         dashboardBtn.className = 'btn btn-success'
+        const dailyExpenseBtn = document.getElementById('dailyExpenseBtn');
+        const monthlyExpenseBtn = document.getElementById('monthlyExpenseBtn');
+        const yearlyExpenseBtn = document.getElementById('yearlyExpenseBtn');
+        dailyExpenseBtn.className = 'btn btn-success'
+        monthlyExpenseBtn.className = 'btn btn-success'
+        yearlyExpenseBtn.className = 'btn btn-success'
+        
     }
     if (token == undefined || token == '' || token == null) {
         alert("Yoe are not login, Please login first to add Expense");
@@ -120,8 +127,8 @@ const handleOpenRazorpay = (data) => {
                     const isPremium = document.getElementById('isPremium');
                     console.log(isPremium);
                     isPremium.innerHTML = "<p>You are a premium user now</p>";
-                    localStorage.setItem('token', response.token)
-                    localStorage.setItem('isPremium', response.is_premium)
+                    localStorage.setItem('token', response.data.token)
+                    localStorage.setItem('isPremium', response.data.is_premium)
                 }))
         }
     }
@@ -152,6 +159,39 @@ const displayUsers = (data) => {
 dashboardBtn.addEventListener('click', async () => {
     try {
         const data = await axios.get(`${url}/premium/dashboard`, config);
+        console.log(data.data.data);
+        document.getElementById('listOfUses').innerHTML = '';
+        data.data.data.forEach(element => displayUsers(element));
+    }
+    catch {
+
+    }
+});
+dailyExpenseBtn.addEventListener('click', async () => {
+    try {
+        const data = await axios.get(`${url}/premium/dailyExpense`, config);
+        console.log(data.data.data);
+        document.getElementById('listOfUses').innerHTML = '';
+        data.data.data.forEach(element => displayUsers(element));
+    }
+    catch {
+
+    }
+});
+monthlyExpenseBtn.addEventListener('click', async () => {
+    try {
+        const data = await axios.get(`${url}/premium/monthlyExpense`, config);
+        console.log(data.data.data);
+        document.getElementById('listOfUses').innerHTML = '';
+        data.data.data.forEach(element => displayUsers(element));
+    }
+    catch {
+
+    }
+});
+yearlyExpenseBtn.addEventListener('click', async () => {
+    try {
+        const data = await axios.get(`${url}/premium/yearlyExpense`, config);
         console.log(data.data.data);
         document.getElementById('listOfUses').innerHTML = '';
         data.data.data.forEach(element => displayUsers(element));
