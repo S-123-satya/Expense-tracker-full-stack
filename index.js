@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv').config();
+const bcrypt = require('bcrypt');
 
 const User = require('./model/userModel');
 const Expense = require('./model/expensemodel');
@@ -50,7 +51,20 @@ app.post('/updatepassword',async (req,res)=>{
         });
     console.log(result);
     if(result!==null){
-        res.json({message:'maine to apna kaam kar diya'})
+        const hash=await bcrypt.hash(req.body.password, 10)
+        const resetresult=await User.update({ password: hash }, {
+            where: {
+              id: result.UserId
+            }
+          });
+          const updateforget=await ForgotUser.update({ isActive: false }, {
+            where: {
+                uuid:arr[arr.length-1],
+              }
+            }); 
+        console.log(resetresult);
+        console.log(updateforget);
+        res.json({message:'password reset'})
     }
     
     // res.json({message:"reset successful"});
