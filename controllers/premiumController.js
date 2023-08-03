@@ -30,136 +30,104 @@ module.exports.getPremiumController = (req, res) => {
     });
 }
 
-module.exports.postPremiumController = async(req, res) => {
+module.exports.postPremiumController = async (req, res) => {
     const t = await sequelize.transaction();
-    console.log(req.body);
-    // STEP 1: Receive Payment Data
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-    // Pass yours key_secret here
-    const key_secret = process.env.KEY_SECRET;
+    try {
+        console.log(req.body);
+        // STEP 1: Receive Payment Data
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+        // Pass yours key_secret here
+        const key_secret = process.env.KEY_SECRET;
 
-    // STEP 2: Verification & Send Response to User
+        // STEP 2: Verification & Send Response to User
 
-    // Creating hmac object
-    let hmac = crypto.createHmac('sha256', key_secret);
+        // Creating hmac object
+        let hmac = crypto.createHmac('sha256', key_secret);
 
-    // Passing the data to be hashed
-    hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
+        // Passing the data to be hashed
+        hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
 
-    // Creating the hmac in the required format
-    const generated_signature = hmac.digest('hex');
+        // Creating the hmac in the required format
+        const generated_signature = hmac.digest('hex');
 
-    console.log(generated_signature);
-    if (razorpay_signature === generated_signature) {
-        Order.update(
-            {
-                payment_id: req.body.razorpay_payment_id,
-                payment_sign: req.body.razorpay_signature,
-                payment_status: "SUCCESS"
-            } /* set attributes' value */,
-            {
-                where: {
-                    order_id: req.body.razorpay_order_id,
-                    
-                },transaction:t
-            } /* where criteria */
-        )
-            .then(async result =>{
-                 console.log(result)
-                await t.commit()
-            })
-            .catch(async err => {
-                console.log(err)
-               await t.rollback()
-            })
-        jwt.verify(req.token, secretKey, (err, data) => {
-            if (err) {
-                console.log(err);
-                res.json({
-                    message: 'invalid token'
-                })
-            }
-            else {
-                console.log(data);
-                console.log(data.UserId);
-                User.update({
-                    is_premium: true
-                },
-                    {
-                        where: {
-                            id: data.user.userId,
-                            
-                        },transaction:t
+        console.log(generated_signature);
+        if (razorpay_signature === generated_signature) {
+            const result = await Order.update(
+                {
+                    payment_id: req.body.razorpay_payment_id,
+                    payment_sign: req.body.razorpay_signature,
+                    payment_status: "SUCCESS"
+                } /* set attributes' value */,
+                {
+                    where: {
+                        order_id: req.body.razorpay_order_id,
+
+                    }, transaction: t
+                } /* where criteria */
+            )
+            jwt.verify(req.token, secretKey, async (err, data) => {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        message: 'invalid token'
                     })
-                    .then(result => {
-                        console.log(`after update`);
-                        console.log(result);
-                        // generate jwt token with id and isPremirum
-                        User.findOne({
+                }
+                else {
+                    console.log(data);
+                    console.log(data.UserId);
+                    const user_update = await User.update({
+                        is_premium: true
+                    },
+                        {
                             where: {
                                 id: data.user.userId,
-                            }
+
+                            }, transaction: t
                         })
-                            .then(async result1 => {
-                                console.log(`after fetch`);
-                                console.log(result1);
-                                console.log(result1.dataValues);
-                                const user = {
-                                    userId: result1.dataValues.id,
-                                    is_premium: result1.dataValues.is_premium
-                                }
-                                jwt.sign({ user }, secretKey, (err, token) => {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                    else {
-                                        return res.json({ name: result1.dataValues.name, token, is_premium: true })
-                                    }
-                                })
-                                await t.commit();
-                            })
-                            .catch(async err =>{
-                                console.log(err);
-                                await t.rollback();
-                            
-                            } )
-                        // res.json({ message: "Premium User" });
+                    console.log(user_update);
+                    // generate jwt token with id and isPremirum
+                    const user_find = await User.findOne({
+                        where: {
+                            id: data.user.userId,
+                        }
                     })
-                    .catch(async err =>{
-                        console.log(err);
-                        await t.rollback();
-                    
-                    } )
-            }
-        })
-    }
-    else
+                    console.log(`after fetch`);
+
+                    const user = {
+                        userId: user_find.dataValues.id,
+                        is_premium: user_find.dataValues.is_premium
+                    }
+                    jwt.sign({ user }, secretKey, (err, token) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        else {
+                            return res.json({ name: user_find.dataValues.name, token, is_premium: true })
+                        }
+                    })
+                    await t.commit();
+                }
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        await t.rollback();
         return res.json({ success: false, message: "Payment verification failed" })
+    }
 
 }
 module.exports.getDashboardController = async (req, res) => {
     const user = await User.findAll({
-        include:[
+        include: [
             {
-                model:Expense,
-                attributes:[]
+                model: Expense,
+                attributes: []
             }
         ],
-        attributes:['name',[sequelize.fn('sum',sequelize.col(`expenses.expenseInput`)),'totalcost']],
-        group:['id'],
-        order:[['totalcost','DESC']]
+        attributes: ['name', [sequelize.fn('sum', sequelize.col(`expenses.expenseInput`)), 'totalcost']],
+        group: ['id'],
+        order: [['totalcost', 'DESC']]
     });
-    // const expenses = await Expense.findAll({
-    //     attributes:['UserId',[Sequelize.fn('sum',Sequelize.col(`expenseInput`)),'totalcost']],
-    //     group:'UserId',
-    // });
-    // console.log(`expenses`);
-    // console.log(expenses);
-    // console.log(data);
-    // console.log(amount);
-    // const d = data.sort((a, b) => b.expense - a.expense);
-    // console.log(data);
-    // console.log(d);
     console.log(user);
     res.json({ data: user });
 }
