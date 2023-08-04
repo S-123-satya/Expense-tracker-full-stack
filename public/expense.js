@@ -8,6 +8,17 @@ selectOffset.addEventListener('change', (e) => {
     console.log(e);
     console.log(e.target.value);
     localStorage.setItem("offset", e.target.value)
+    const token = localStorage.getItem('token');
+    if (token !== null) {
+        axios.get(`${url}/expense?page=1&&offset=${e.target.value}`, config)
+            .then(data => {
+                console.log(data);
+                console.log(`96`);
+                console.log(data.data);
+                pagination(data.data);
+            })
+            .catch(err => console.log(err));
+        }
 })
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('UserId');
 const config = {
@@ -34,7 +45,15 @@ const saveExpense = (e) => {
     axios.post(`${url}/expense`, obj)
         .then(data => {
             console.log(data);
-            display(data.data.data);
+            const result = data.data.data
+            // creating new li node 
+            const expenseList = document.getElementById('expenseList');
+            const newNode = document.createElement("li");
+            newNode.innerHTML = ` ${result.expenseInput} ${result.descriptionInput} ${result.categoryInput}
+                <button onclick="`+ `deleteExpense('${result.id}')` + `">Delete</button>`
+            newNode.id=`${result.id}`
+            // inserting as a first child in expenseList
+            expenseList.insertBefore(newNode, expenseList.children[0]);
         })
         .catch(err => console.log(err));
     expenseInput.value = '';

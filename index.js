@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv').config();
 const bcrypt = require('bcrypt');
+// const helmet = require('helmet');
 
 const User = require('./model/userModel');
 const Expense = require('./model/expensemodel');
@@ -23,8 +24,8 @@ const secretKey = "secretKey";
 
 //port number where our server runs
 const port = 3000;
-
 app.use(cors());
+// app.use(helmet());
 
 //we are using express.json which uses body-parser in background in order to parse only json request from body
 app.use(express.json());
