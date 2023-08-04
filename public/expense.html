@@ -68,7 +68,18 @@
         </div>
       </div>
     </form>
-    <ul id="expenseList" class="list-group mt-5"></ul>
+    <select class="offset" id="offsetInput" required>
+      <option value="">Choose Records per Page</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+      <option value="25">25</option>
+      <option value="30">30</option>
+    </select>
+    <ul id="expenseList" class="list-group mt-3"></ul>
+    <div id="pagination">
+    </div>
     <button id="dashboardBtn" class="d-none">Show Dashboard</button>
     <button id="dailyExpenseBtn" class="d-none">Show Daily Expenses</button>
     <button id="monthlyExpenseBtn" class="d-none">Show Monthly Expenses</button>

@@ -56,7 +56,7 @@ module.exports.getExpenseController = (req, res) => {
     console.log(`Customer details are: `);
     console.clear();
     console.log(req.token);
-    jwt.verify(req.token, secretKey, (err, data) => {
+    jwt.verify(req.token, secretKey, async (err, data) => {
         if (err) {
             console.log(err);
             res.json({
@@ -65,17 +65,48 @@ module.exports.getExpenseController = (req, res) => {
         }
         else {
             console.log(data);
-            console.log(data.UserId);
-            Expense.findAll({
+            console.log(68);
+            console.log(req.query);
+            let page = 1;
+            let offset = 10;
+            let limit=50;
+            let pageAsNumber = Number.parseInt(req.query.page);
+            let offsetAsNumber = Number.parseInt(req.query.offset);
+            if (!Number.isNaN(pageAsNumber )&& pageAsNumber > 1)
+                page = pageAsNumber;
+            if (!Number.isNaN(offsetAsNumber )&& offsetAsNumber >= 5 && offsetAsNumber<=limit)
+                offset = offsetAsNumber;
+            const result = await Expense.findAndCountAll({
                 where: {
                     UserId: data.user.userId
-                }
+                },
+                limit: offset,
+                offset: offset * (page - 1),
+                order: [['createdAt', 'DESC']]
             })
-                .then(result => {
-                    console.log(result);
-                    res.json(result);
-                })
-                .catch(err => console.log(err));
+            const total_pages = Math.ceil(result.count / offset);
+            let nextPage;
+            let prevPage;
+            let hasNextPage = false;
+            let hasPrevPage = false;
+            if (total_pages > 1 && page < total_pages) {
+                hasNextPage = true;
+                nextPage = page + 1
+            }
+            if (page <= total_pages && page > 1) {
+                hasPrevPage = true;
+                prevPage = page - 1
+            }
+            console.log(result);
+            res.json({
+                result: result.rows,
+                total_pages: Math.ceil(result.count / offset),
+                currentPage: page,
+                nextPage,
+                prevPage,
+                hasNextPage,
+                hasPrevPage,
+            });
         }
     })
 };
@@ -93,7 +124,7 @@ module.exports.deleteExpenseController = (req, res) => {
                 })
             }
             else {
-                const delete_data_expense= await Expense.findAll({where:{id: req.params.id,UserId: data.user.userId}})
+                const delete_data_expense = await Expense.findAll({ where: { id: req.params.id, UserId: data.user.userId } })
                 const delete_data = await Expense.destroy({
                     where: {
                         id: req.params.id,

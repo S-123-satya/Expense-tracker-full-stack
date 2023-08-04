@@ -1,8 +1,14 @@
 // const e = require("cors");
 
 const url = 'http://localhost:3000';
-
-
+const selectOffset = document.getElementById('offsetInput');
+console.log(selectOffset);
+selectOffset.addEventListener('change', (e) => {
+    // e.target.value
+    console.log(e);
+    console.log(e.target.value);
+    localStorage.setItem("offset", e.target.value)
+})
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('UserId');
 const config = {
     headers: {
@@ -46,18 +52,61 @@ const display = (data) => {
     </li>`
 
 }
-
+const prevPage = (num) => {
+    let offset = localStorage.getItem('offset');
+    axios.get(`${url}/expense?page=${num}&&offset=${offset}`, config)
+        .then(data => {
+            console.log(data.data);
+            pagination(data.data);
+        })
+        .catch(err => {
+            console.log(err)
+            console.log(`error in something`);
+        })
+}
+const nextPage = (num) => {
+    let offset = localStorage.getItem('offset');
+    axios.get(`${url}/expense?page=${num}&&offset=${offset}`, config)
+        .then(data => {
+            console.log(data.data);
+            pagination(data.data);
+        })
+        .catch(err => {
+            console.log(err)
+            console.log(`error in something`);
+        })
+}
+const pagination = (data) => {
+    console.log(`76`);
+    console.log(data);
+    console.log(data.hasNextPage);
+    console.log(typeof data.hasNextPage);
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = "";
+    const expenseList = document.getElementById('expenseList');
+    expenseList.innerHTML = "";
+    if (data.hasPrevPage === true) {
+        pagination.innerHTML += `<button id="prevPage" onclick="prevPage(${data.prevPage})">${data.prevPage}</button>`
+    }
+    pagination.innerHTML += `<button id="currentPage">${data.currentPage}</button>`
+    if (data.hasNextPage === true) {
+        pagination.innerHTML += `<button id="nextPage" onclick="nextPage(${data.nextPage})" value="${data.nextPage}">${data.nextPage}</button>`
+    }
+    if (data.result.length > 0)
+        data.result.forEach(element => {
+            display(element);
+        });
+}
 window.addEventListener('DOMContentLoaded', () => {
-
+    let offset = localStorage.getItem('offset');
     const token = localStorage.getItem('token');
     if (token !== null) {
-        axios.get(`${url}/expense`, config)
+        axios.get(`${url}/expense?page=1&&offset=${offset}`, config)
             .then(data => {
                 console.log(data);
-                if (data.data.length > 0)
-                    data.data.forEach(element => {
-                        display(element);
-                    });
+                console.log(`96`);
+                console.log(data.data);
+                pagination(data.data);
             })
             .catch(err => console.log(err));
     }
@@ -75,7 +124,7 @@ window.addEventListener('DOMContentLoaded', () => {
         dailyExpenseBtn.className = 'btn btn-success'
         monthlyExpenseBtn.className = 'btn btn-success'
         yearlyExpenseBtn.className = 'btn btn-success'
-        
+
     }
     if (token == undefined || token == '' || token == null) {
         alert("Yoe are not login, Please login first to add Expense");
@@ -201,22 +250,23 @@ yearlyExpenseBtn.addEventListener('click', async () => {
     }
 });
 
-function download(){
+function download() {
     axios.get(`${url}/user/download`, config)
-    .then((response) => {
-        if(response.status === 201){
-            //the bcakend is essentially sending a download link
-            //  which if we open in browser, the file would download
-            var a = document.createElement("a");
-            a.href = response.data.fileUrl;
-            a.download = 'myexpense.csv';
-            a.click();
-        } else {
-            throw new Error(response.data.message)
-        }
+        .then((response) => {
+            if (response.status === 201) {
+                //the bcakend is essentially sending a download link
+                //  which if we open in browser, the file would download
+                var a = document.createElement("a");
+                a.href = response.data.fileUrl;
+                a.download = 'myexpense.csv';
+                a.click();
+            } else {
+                throw new Error(response.data.message)
+            }
 
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
+
