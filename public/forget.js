@@ -8,7 +8,16 @@ const getPassword = (e) => {
         email: email.value,
     }
     console.log(obj);
-    axios.post(`${url}/password/forgotpassword`,obj)
-    .then(res=>console.log(res))
-    .catch(err=>console.log(err))
+    axios.post(`${url}/password/forgotpassword`, obj)
+        .then(res => {
+            console.log(res);
+            console.log(res.data);
+            alert(res?.data?.message);
+            if (res?.data?.status === 501) {
+                email.value = '';
+            }
+            else
+                window.location = `${url}/login.html`
+        })
+        .catch(err => console.log(err))
 }

@@ -61,7 +61,10 @@ module.exports.postForgetController = async (req, res) => {
                 }
             });
 
-            res.json({ message: "forget password" })
+            res.json({ message: "A reset link send to your email id" })
+        }
+        else {
+            res.json({message:"Invalid email id",status:501});
         }
     } catch (error) {
         console.log(error);
