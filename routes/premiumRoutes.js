@@ -14,7 +14,7 @@ const extractToken = (req, res, next) => {
     }
 }
 
-router.get('/', getPremiumController)
+router.get('/',extractToken, getPremiumController)
 router.post('/', extractToken, postPremiumController)
 router.get('/dashboard', extractToken, getDashboardController)
 

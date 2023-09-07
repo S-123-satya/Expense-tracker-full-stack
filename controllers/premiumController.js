@@ -24,7 +24,7 @@ module.exports.getPremiumController = (req, res) => {
             return res.status(500).json({ message: "error occur" })
         }
         else {
-            Order.create({ order_id: order.id, payment_status: "PENDING", UserId: 1 })
+            Order.create({ order_id: order.id, payment_status: "PENDING", UserId: 1 }) //yaha UserId ko hard code kar diya hai mujhe yaha pe token se id extract kar ke yaha userid dalna padega
             return res.status(201).json({ message: "succesful", order });
         }
     });
@@ -109,6 +109,7 @@ module.exports.postPremiumController = async (req, res) => {
                 }
             })
         }
+        // paymenet fail in Order table
     } catch (error) {
         console.log(error);
         await t.rollback();

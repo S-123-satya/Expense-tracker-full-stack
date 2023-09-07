@@ -75,13 +75,13 @@ module.exports.getExpenseController = (req, res) => {
             if (!Number.isNaN(pageAsNumber )&& pageAsNumber > 1)
                 page = pageAsNumber;
             if (!Number.isNaN(offsetAsNumber )&& offsetAsNumber >= 5 && offsetAsNumber<=limit)
-                offset = offsetAsNumber;
+                offset = offsetAsNumber;//I should write limit and also pass it into sql
             const result = await Expense.findAndCountAll({
                 where: {
                     UserId: data.user.userId
                 },
                 limit: offset,
-                offset: offset * (page - 1),
+                offset: offset * (page - 1),// where:{ index of record >= offset}
                 order: [['createdAt', 'DESC']]
             })
             const total_pages = Math.ceil(result.count / offset);
@@ -185,3 +185,6 @@ module.exports.deleteExpenseController = (req, res) => {
 //         }
 //     })
 // })
+
+// page=== offset
+// limit === no of record

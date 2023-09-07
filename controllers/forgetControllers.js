@@ -4,7 +4,7 @@ const { createTransport } = require('nodemailer');
 const User = require('../model/userModel');
 const ForgotUser = require('../model/ForgotPasswordRequestsModel');
 const { v4: uuidv4 } = require('uuid');
-var otp = 0;
+var otp = 0; //no use this time
 
 
 module.exports.postForgetController = async (req, res) => {
@@ -58,10 +58,10 @@ module.exports.postForgetController = async (req, res) => {
                     console.log(error);
                 } else {
                     console.log('Email sent: ' + info.response);
+                    res.json({ message: "A reset link send to your email id" })
                 }
             });
 
-            res.json({ message: "A reset link send to your email id" })
         }
         else {
             res.json({message:"Invalid email id",status:501});
@@ -76,7 +76,7 @@ module.exports.postresetpasswordController = async(req, res) => {
     console.log(uuid);   
     const result=await ForgotUser.findOne({
         where:{
-            uuid:uuid,
+            uuid:uuid,//also check that user link is isActive or not
         }
     })
     console.log(result);

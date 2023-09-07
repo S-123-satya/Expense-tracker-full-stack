@@ -187,7 +187,7 @@ const handleOpenRazorpay = (data) => {
         order_id: data.id,
         handler: function (response) {
             console.log(`handler`);
-            console.log(response);
+            console.log(response);//I can check that my payment status
             axios.post(`${url}/premium`, response, config)
                 .then((response => {
                     console.log(response);

@@ -86,7 +86,7 @@ window.addEventListener('DOMContentLoaded', () => {
 const forgetPassword=()=>{
     const forget_password = document.getElementById('forget_password');
     forget_password.addEventListener('click',()=>{
-        window.location=`${url}/forget.html`;
+        location=`${url}/forget.html`;
     })
 }
 forgetPassword();
