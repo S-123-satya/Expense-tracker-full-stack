@@ -1,35 +1,66 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../util/db');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-
-const User = sequelize.define('User', {
-  // Model attributes are defined here
+const blogSchema = new Schema({
   name: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: String,
+    required: true,
   },
   email: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
+
     unique: true
   },
   password: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
+
   },
   is_premium: {
-    type:DataTypes.BOOLEAN,
-    defaultValue:false
+    type: Boolean,
+    defaultValue: false
   },
-    total_expenses:{
-      type:DataTypes.BIGINT,
-      defaultValue:0
+  total_expenses: {
+    type: Number,
+    defaultValue: 0
   },
-}, {
-  // Other model options go here
 });
 
+const User = mongoose.model('User', blogSchema);
 module.exports = User;
+// const { DataTypes } = require('sequelize');
+// const sequelize = require('../util/db');
 
-// `sequelize.define` also returns the model
-console.log(User === sequelize.models.User); // true
+
+// const User = sequelize.define('User', {
+//   // Model attributes are defined here
+//   name: {
+//     type: DataTypes.STRING,
+//     allowNull:false
+//     //   },
+//   email: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//     unique: true
+//   },
+//   password: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//   },
+//   is_premium: {
+//     type:DataTypes.BOOLEAN,
+//     defaultValue:false
+//   },
+//     total_expenses:{
+//       type:DataTypes.BIGINT,
+//       defaultValue:0
+//   },
+// }, {
+//   // Other model options go here
+// });
+
+// module.exports = User;
+
+// // `sequelize.define` also returns the model
+// console.log(User === sequelize.models.User); // true
