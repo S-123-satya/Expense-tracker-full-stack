@@ -15,8 +15,9 @@ const save = (e) => {
     console.log(obj);
 
     axios.post(`${url}/signup`, obj)
-        .then(data => {
+        .then(async data => {
             console.log(data);
+            console.log(data.data);
             if (data.data.name == 'SequelizeUniqueConstraintError') {
                 console.log('duplicate');
                 const showResult = document.getElementById('showResult');

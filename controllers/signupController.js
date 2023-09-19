@@ -16,11 +16,14 @@ module.exports.postSignUpController = (req, res) => {
             User.create(req.body)
                 .then(result => {
                     console.log(result);
-                    console.log(result.dataValues.id);
+                    console.log(`19`);
+                    console.log(result._id);
                     const user = {
-                        userId: result.dataValues.id,
-                        is_premium:result.dataValues.is_premium
+                        userId: result._id,
+                        is_premium:result.is_premium
                     }
+                    console.log(user);
+                    console.log(`25`);
                     jwt.sign({ user }, secretKey,  (err, token) => {
                         if (err) {
                             console.log(err);
@@ -30,8 +33,8 @@ module.exports.postSignUpController = (req, res) => {
                             res.json({ 
                                 message: "User login Succesfully",
                                 token,
-                                name: result.dataValues.name,
-                                is_premium:result.dataValues.is_premium});
+                                name: result.name,
+                                is_premium:result.is_premium});
                         }
                         return;
                     })

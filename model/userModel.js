@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const blogSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -9,25 +9,35 @@ const blogSchema = new Schema({
   email: {
     type: String,
     required: true,
-
     unique: true
   },
   password: {
     type: String,
     required: true,
-
   },
   is_premium: {
     type: Boolean,
     defaultValue: false
   },
+  orders:{
+    type:mongoose.ObjectId,
+    ref:'Order'
+  },
   total_expenses: {
     type: Number,
     defaultValue: 0
   },
+  expenses:{
+    type:mongoose.ObjectId,
+    ref:"Expense"
+  },
+  forgetpasswords:{
+    type:mongoose.ObjectId,
+    ref:"ForgotUser"
+  },
 });
 
-const User = mongoose.model('User', blogSchema);
+const User = mongoose.model('User', userSchema);
 module.exports = User;
 // const { DataTypes } = require('sequelize');
 // const sequelize = require('../util/db');
