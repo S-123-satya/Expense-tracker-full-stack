@@ -8,13 +8,9 @@ const forgotUserSchema = new Schema({
         required:true
     },
     isActive:{
-        type:BOOLEAN,
+        type:Boolean,
         required:true,
     } ,
-    user_id:{
-        type:mongoose.ObjectId,
-        ref:"User"
-      }
 });
 
 const ForgotUser = mongoose.model('ForgotUser', forgotUserSchema);

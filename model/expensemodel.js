@@ -1,9 +1,10 @@
+const { Int32 } = require('mongodb');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const expenseSchema = new Schema({
     expenseInput: {
-        type: BIGINT,
+        type: Number,
         required:true
     },
     descriptionInput: {
@@ -14,10 +15,6 @@ const expenseSchema = new Schema({
         type: String,
         required:true,
     },
-    user_id:{
-        type:mongoose.ObjectId,
-        ref:"User"
-      }
 });
 
 const Expense = mongoose.model('Expense', expenseSchema);

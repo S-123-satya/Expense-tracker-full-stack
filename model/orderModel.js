@@ -13,10 +13,6 @@ const orderSchema = new Schema({
     type: String,
   },
   payment_status:String,
-  user_id:{
-    type:mongoose.ObjectId,
-    ref:"User"
-  }
 });
 
 const Order = mongoose.model('Order', orderSchema);

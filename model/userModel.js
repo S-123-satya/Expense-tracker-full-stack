@@ -27,14 +27,18 @@ const userSchema = new Schema({
     type: Number,
     defaultValue: 0
   },
-  expenses:{
-    type:mongoose.ObjectId,
+  expenses:[{
+    type:mongoose.Schema.Types.ObjectId,
     ref:"Expense"
-  },
-  forgetpasswords:{
-    type:mongoose.ObjectId,
+  }],
+  forgetpasswords:[{
+    type:mongoose.Schema.Types.ObjectId,
     ref:"ForgotUser"
-  },
+  }],
+  orders:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Order"
+  }],
 });
 
 const User = mongoose.model('User', userSchema);
