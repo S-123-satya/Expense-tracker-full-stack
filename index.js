@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // handling request from users
 app.use('/signup', signupRoutes);
-// app.use('/login', loginRoutes);
+app.use('/login', loginRoutes);
 // app.use('/expense', expenseRoutes);
 // app.use('/premium', premiumRoutes);
 // app.use('/password',forgetRoutes);

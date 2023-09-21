@@ -63,6 +63,7 @@ const login = (e) => {
             window.location = `${url}/expense.html`;
             email.value = '';
             password.value = '';
+            //user already exist message and not direct to anyother location(bug)
         })
         .catch(err => {
             console.log(err);

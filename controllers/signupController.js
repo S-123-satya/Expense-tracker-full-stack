@@ -4,59 +4,41 @@ const User = require('../model/userModel');
 
 const secretKey = "secretKey";
 
-module.exports.postSignUpController =async (req, res) => {
-    console.log(`in post sing controller`);
-    bcrypt.hash(req.body.password, 10)
-        .then(function (hash) {
-            // Store hash in your password DB.
+module.exports.postSignUpController = async (req, res) => {
+    try {
+        console.log(`in post sing controller`);
+        const checkUser = await User.findOne({ email: req.body.email })
+        if (!checkUser) {
+            const hash = await bcrypt.hash(req.body.password, 10)
             req.body.password = hash;
-            User.create(req.body)
-                .then(result => {
-                    const user = {
-                        userId: result._id,
-                        is_premium:false
-                    }
-                    jwt.sign({ user }, secretKey,  (err, token) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        else {
-                            console.log('successful encry');
-                            res.json({ 
-                                message: "User login Succesfully",
-                                token,
-                                name: result.name,
-                                is_premium:result.is_premium});
-                        }
-                        return;
-                    })
+            const newUser = await User.create(req.body)
+            const user = {
+                userId: newUser._id,
+                is_premium: false
+            }
+            jwt.sign({ user }, secretKey, (err, token) => {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    console.log('successful encry');
+                    res.json({
+                        message: "User login Succesfully",
+                        token,
+                        name: newUser.name,
+                        is_premium: newUser.is_premium,
+                        status:201
+                    });
+                }
+            })
+        }
+        else {
+            res.json({ message: 'User already exists' ,status:409 });
+        }
 
-                })
-                .catch(err => {
-                    console.log(err)
-                    res.send(err);
-                });
-        })
-        .catch(err=>{
-            console.log(err);
-            return res.end();
-        });
+    }
+    catch (err) {
+        console.log(err);
+        res.send(err.message);
+    };
 };
-
-//api for token generation
-// app.post('/jwt', (req, res) => {
-//     const user = {
-//         id: 1,
-//         name: 'bhavya',
-//         email: "bhavya@gmail.com",
-//         password: 'smart'
-//     }
-//     jwt.sign({ user }, secretKey, { expiresIn: '1000s' }, (err, token) => {
-//         if (err) {
-//             console.log(err);
-//         }
-//         else {
-//             res.json({ token })
-//         }
-//     })
-// })
