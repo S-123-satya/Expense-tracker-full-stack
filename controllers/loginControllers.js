@@ -47,8 +47,6 @@ module.exports.postLoginController = async (req, res) => {
 
 };
 
-
-// User.find({
 //     where: {
 //         email: req.body.email
 //     }

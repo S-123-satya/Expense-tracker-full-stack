@@ -7,5 +7,4 @@ const router=express.Router();
 router.get('/',extractToken,getExpenseController);
 router.post('/',extractToken,postExpenseController);
 router.delete('/:id',extractToken, deleteExpenseController);
-extractToken
 module.exports=router;

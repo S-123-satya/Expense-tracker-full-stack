@@ -20,9 +20,6 @@ const updateRoutes=require('./routes/updateRoutes');
 
 const app = express();
 
-//secret key for jwt
-const secretKey = "secretKey";
-
 //port number where our server runs
 const port = 3000;
 app.use(cors());
@@ -58,20 +55,6 @@ app.use('/expense', expenseRoutes);
 // sequelize.authenticate()
 // .then(con=>console.log(con))
 // .catch(err=>console.log(err));
-
-const obj=new User({
-    name:'satya',
-    email:'satya1@gmail.com',
-    password:'12345'
-})
-// obj.save()
-// .then(result=>console.log(result))
-// .catch(err=>console.log(err))
-const showAll=async ()=>{
-    const result=await User.find()
-    console.log(result);
-}
-showAll()
 
 mongodb()
 .then(respose=>{
