@@ -17,7 +17,7 @@ const userSchema = new Schema({
   },
   is_premium: {
     type: Boolean,
-    defaultValue: false
+    default: false
   },
   orders:{
     type:mongoose.ObjectId,
@@ -25,7 +25,7 @@ const userSchema = new Schema({
   },
   total_expenses: {
     type: Number,
-    defaultValue: 0
+    default: 0
   },
   expenses:[{
     type:mongoose.Schema.Types.ObjectId,

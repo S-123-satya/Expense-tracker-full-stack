@@ -3,39 +3,47 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../model/userModel');
 
-const secretKey = "secretKey";
-
 module.exports.postLoginController = async (req, res) => {
     try {
-        console.log(req.body);
-        const user = await User.findOne({ email: req.body.email })
-        console.log(user);
-        if (user) {
-            const checkPassword = await bcrypt.compare(req.body.password, user.password)
+        console.log(`in login post routes controller`);
+        const newUser = await User.findOne({ email: req.body.email })
+        const user={
+            userId:newUser._id,
+            is_premium:newUser.is_premium
+        }
+        if (newUser) {
+            const checkPassword = await bcrypt.compare(req.body.password, newUser.password)
+            console.log(`20`);
             if (checkPassword) {
-                jwt.sign({ user }, secretKey, (err, token) => {
+                jwt.sign({ user }, process.env.SECRET_TOKEN_KEY, (err, token) => {
                     if (err) {
                         console.log(err);
                     }
                     else {
-                        res.json({ name: user.name, token, is_premium: user.is_premium })
+                        res.json({
+                            message: "User login Succesfully", 
+                            name: newUser.name,
+                            token, 
+                            is_premium: newUser.is_premium,
+                            status:201,
+                        })
                     }
                 })
             }
             else {
                 console.log(`password not matched`);
                 res.status(401);
-                res.json({ name: "user password is not correct" });
+                res.json({ message: "user password is not correct", });
             }
         }
         else{
             res.json({message:'Invalid email id'})
         }
     }
- catch (error) {
-    console.log(error);
-    res.send(error.message);
-}
+    catch (error) {
+        console.log(error);
+        res.send({message:error.message});
+    }
 
 };
 

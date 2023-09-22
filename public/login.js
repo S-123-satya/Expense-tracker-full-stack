@@ -52,8 +52,8 @@ const login = (e) => {
 
     axios.post(`${url}/login`, obj)
         .then(data => {
-            console.log(`data` + data.data);
-            console.log(data.data);
+            console.log(`in login response`);
+            console.log(data);
             localStorage.setItem(`userName`, `${data.data.name}`)
             localStorage.setItem(`token`, `${data.data.token}`)
             localStorage.setItem(`isPremium`, `${data.data.is_premium}`)

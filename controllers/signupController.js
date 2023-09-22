@@ -11,11 +11,15 @@ module.exports.postSignUpController = async (req, res) => {
         if (!checkUser) {
             const hash = await bcrypt.hash(req.body.password, 10)
             req.body.password = hash;
+            req.body.is_premium=false;
             const newUser = await User.create(req.body)
             const user = {
                 userId: newUser._id,
-                is_premium: false
+                is_premium: newUser.is_premium
             }
+            console.log(`20`)
+            console.log(newUser);
+            console.log(user);
             jwt.sign({ user }, secretKey, (err, token) => {
                 if (err) {
                     console.log(err);

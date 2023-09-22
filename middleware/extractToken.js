@@ -15,7 +15,7 @@ module.exports.extractToken = (req, res, next) => {
                 })
             }
             else {
-                req.data=data;
+                req.tokenData=data;
                 next();
             }
         })

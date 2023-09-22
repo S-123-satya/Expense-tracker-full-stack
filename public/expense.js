@@ -26,41 +26,7 @@ const config = {
         Authorization: `${localStorage.getItem('token')}` //the token is a variable which holds the token
     }
 }
-const saveExpense = (e) => {
-    e.preventDefault();
-    console.log(e);
-    console.log(Object.keys(localStorage)[0]);
-    console.log('hello');
-    const expenseInput = document.getElementById('expenseInput');
-    const descriptionInput = document.getElementById('descriptionInput');
-    const categoryInput = document.getElementById('categoryInput');
-    const obj = {
-        expenseInput: expenseInput.value,
-        descriptionInput: descriptionInput.value,
-        categoryInput: categoryInput.value,
-        token: localStorage.getItem(`token`)
-    }
-    console.log(obj);
 
-    axios.post(`${url}/expense`, obj)
-        .then(data => {
-            console.log(data);
-            const result = data.data.data
-            // creating new li node 
-            const expenseList = document.getElementById('expenseList');
-            const newNode = document.createElement("li");
-            newNode.innerHTML = ` ${result.expenseInput} ${result.descriptionInput} ${result.categoryInput}
-                <button onclick="`+ `deleteExpense('${result.id}')` + `">Delete</button>`
-            newNode.id=`${result.id}`
-            // inserting as a first child in expenseList
-            expenseList.insertBefore(newNode, expenseList.children[0]);
-        })
-        .catch(err => console.log(err));
-    expenseInput.value = '';
-    descriptionInput.value = '';
-    categoryInput.value = '';
-
-}
 
 const display = (data) => {
     console.log(data);
@@ -158,6 +124,41 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
 })
+
+const saveExpense = (e) => {
+    e.preventDefault();
+    console.log(e);
+    console.log(Object.keys(localStorage)[0]);
+    console.log('hello');
+    const expenseInput = document.getElementById('expenseInput');
+    const descriptionInput = document.getElementById('descriptionInput');
+    const categoryInput = document.getElementById('categoryInput');
+    const obj = {
+        expenseInput: expenseInput.value,
+        descriptionInput: descriptionInput.value,
+        categoryInput: categoryInput.value,
+    }
+    console.log(obj);
+
+    axios.post(`${url}/expense`, obj,config)
+        .then(data => {
+            console.log(data);
+            const result = data.data.data
+            // creating new li node 
+            const expenseList = document.getElementById('expenseList');
+            const newNode = document.createElement("li");
+            newNode.innerHTML = ` ${result.expenseInput} ${result.descriptionInput} ${result.categoryInput}
+                <button onclick="`+ `deleteExpense('${result.id}')` + `">Delete</button>`
+            newNode.id=`${result.id}`
+            // inserting as a first child in expenseList
+            expenseList.insertBefore(newNode, expenseList.children[0]);
+        })
+        .catch(err => console.log(err));
+    expenseInput.value = '';
+    descriptionInput.value = '';
+    categoryInput.value = '';
+
+}
 
 const logoutUser = () => {
     const logout = document.getElementById('logout');
