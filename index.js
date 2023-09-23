@@ -17,6 +17,8 @@ const premiumRoutes = require('./routes/premiumRoutes');
 const forgetRoutes = require('./routes/forgetRoutes');
 const userRoutes = require('./routes/userRoutes');
 const updateRoutes=require('./routes/updateRoutes');
+const { default: mongoose } = require('mongoose');
+const { $where } = require('./model/expensemodel');
 
 const app = express();
 
@@ -35,10 +37,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/signup', signupRoutes);
 app.use('/login', loginRoutes);
 app.use('/expense', expenseRoutes);
-// app.use('/premium', premiumRoutes);
-// app.use('/password',forgetRoutes);
-// app.use('/user',userRoutes);
-// app.post('/updatepassword',updateRoutes)
+app.use('/premium', premiumRoutes);
+app.use('/password',forgetRoutes);
+app.use('/user',userRoutes);
+app.use('/updatepassword',updateRoutes)
 
 // User.hasMany(ForgotUser);
 // ForgotUser.belongsTo(User);

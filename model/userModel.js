@@ -19,10 +19,6 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
-  orders:{
-    type:mongoose.ObjectId,
-    ref:'Order'
-  },
   total_expenses: {
     type: Number,
     default: 0

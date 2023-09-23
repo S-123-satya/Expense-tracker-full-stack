@@ -13,25 +13,29 @@ const secretKey = "secretKey";
 // 3. we create order for that instance and pass options and a callback function
 // 4. callback  funtion takes 2 args 1st one is err and 2nd one is order 
 //   ----> if not any err occur then we send order as a response
-module.exports.getPremiumController = (req, res) => {
+module.exports.getPremiumController = async (req, res) => {
     let instance = new Razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET });
     let options = {
         amount: 2500,
         currency: "INR",
     }
-    instance.orders.create(options, (err, order) => {
+    instance.orders.create(options, async (err, order) => {
         if (err) {
-            return res.status(500).json({ message: "error occur" })
+            return res.status(500).json({ message: "error occur" });
         }
         else {
-            Order.create({ order_id: order.id, payment_status: "PENDING", UserId: 1 }) //yaha UserId ko hard code kar diya hai mujhe yaha pe token se id extract kar ke yaha userid dalna padega
+            const newOrder = await Order.create({ order_id: order.id, payment_status: "PENDING" }); //yaha UserId ko hard code kar diya hai mujhe yaha pe token se id extract kar ke yaha userid dalna padega
+            const userOrder = await User.findByIdAndUpdate(
+                req.body.UserId,
+                {
+                    $push: { orders: newOrder._id }
+                })
             return res.status(201).json({ message: "succesful", order });
         }
     });
 }
 
 module.exports.postPremiumController = async (req, res) => {
-    const t = await sequelize.transaction();
     try {
         console.log(req.body);
         // STEP 1: Receive Payment Data
@@ -52,83 +56,50 @@ module.exports.postPremiumController = async (req, res) => {
 
         console.log(generated_signature);
         if (razorpay_signature === generated_signature) {
-            const result = await Order.update(
+            const paymentStatus=await Order.findOneAndUpdate(
                 {
-                    payment_id: req.body.razorpay_payment_id,
-                    payment_sign: req.body.razorpay_signature,
-                    payment_status: "SUCCESS"
-                } /* set attributes' value */,
+                    order_id: razorpay_order_id,
+                },
                 {
-                    where: {
-                        order_id: req.body.razorpay_order_id,
-
-                    }, transaction: t
-                } /* where criteria */
+                    $set: { payment_status: "Successfull" }
+                })
+            const result = await User.findByIdAndUpdate(
+                req.tokenData.user.userId,
+                {
+                    $set: {
+                        is_premium: true
+                    }
+                }
             )
-            jwt.verify(req.token, secretKey, async (err, data) => {
+            // generate jwt token with id and isPremirum
+            const user_find = await User.findById(req.tokenData.user.userId)
+            console.log(`after fetch`);
+
+            const user = {
+                userId: user_find.dataValues.id,
+                is_premium: user_find.dataValues.is_premium
+            }
+            jwt.sign({ user }, process.env.SECRET_TOKEN_KEY, (err, token) => {
                 if (err) {
                     console.log(err);
-                    res.json({
-                        message: 'invalid token'
-                    })
                 }
                 else {
-                    console.log(data);
-                    console.log(data.UserId);
-                    const user_update = await User.update({
-                        is_premium: true
-                    },
-                        {
-                            where: {
-                                id: data.user.userId,
-
-                            }, transaction: t
-                        })
-                    console.log(user_update);
-                    // generate jwt token with id and isPremirum
-                    const user_find = await User.findOne({
-                        where: {
-                            id: data.user.userId,
-                        }
-                    })
-                    console.log(`after fetch`);
-
-                    const user = {
-                        userId: user_find.dataValues.id,
-                        is_premium: user_find.dataValues.is_premium
-                    }
-                    jwt.sign({ user }, secretKey, (err, token) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        else {
-                            return res.json({ name: user_find.dataValues.name, token, is_premium: true })
-                        }
-                    })
-                    await t.commit();
+                    return res.json({ name: user_find.dataValues.name, token, is_premium: true })
                 }
             })
         }
-        // paymenet fail in Order table
-    } catch (error) {
+
+    }
+    catch (error) {
         console.log(error);
-        await t.rollback();
         return res.json({ success: false, message: "Payment verification failed" })
     }
 
 }
 module.exports.getDashboardController = async (req, res) => {
-    const user = await User.findAll({
-        include: [
-            {
-                model: Expense,
-                attributes: []
-            }
-        ],
-        attributes: ['name', [sequelize.fn('sum', sequelize.col(`expenses.expenseInput`)), 'totalcost']],
-        group: ['id'],
-        order: [['totalcost', 'DESC']]
-    });
+    const user = await User.find().populate({
+        path: 'expenses',
+        });
     console.log(user);
     res.json({ data: user });
 }

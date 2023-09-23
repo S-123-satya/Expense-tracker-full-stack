@@ -31,9 +31,9 @@ const config = {
 const display = (data) => {
     console.log(data);
     const expenseList = document.getElementById('expenseList');
-    expenseList.innerHTML += `<li id="` + `${data.id}` + `"> 
+    expenseList.innerHTML += `<li id="` + `${data._id}` + `"> 
     ${data.expenseInput} ${data.descriptionInput} ${data.categoryInput}
-    <button onclick="`+ `deleteExpense('${data.id}')` + `">Delete</button>
+    <button onclick="`+ `deleteExpense('${data._id}')` + `">Delete</button>
     </li>`
 
 }
@@ -148,8 +148,8 @@ const saveExpense = (e) => {
             const expenseList = document.getElementById('expenseList');
             const newNode = document.createElement("li");
             newNode.innerHTML = ` ${result.expenseInput} ${result.descriptionInput} ${result.categoryInput}
-                <button onclick="`+ `deleteExpense('${result.id}')` + `">Delete</button>`
-            newNode.id=`${result.id}`
+                <button onclick="`+ `deleteExpense('${result._id}')` + `">Delete</button>`
+            newNode._id=`${result._id}`
             // inserting as a first child in expenseList
             expenseList.insertBefore(newNode, expenseList.children[0]);
         })
@@ -222,7 +222,8 @@ addExpense.addEventListener('click', saveExpense);
 const displayUsers = (data) => {
     console.log(data);
     const listOfUses = document.getElementById('listOfUses');
-    listOfUses.innerHTML += `<li> ${data.name} : ${data.totalcost || 0}`
+    listOfUses.innerHTML += `<li> ${data.name} : ${data.total_expenses
+        || 0}`
 
 }
 dashboardBtn.addEventListener('click', async () => {

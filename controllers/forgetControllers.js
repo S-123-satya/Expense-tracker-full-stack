@@ -12,9 +12,7 @@ module.exports.postForgetController = async (req, res) => {
 
 
         const result = await User.findOne({
-            where: {
                 email: req.body.email
-            }
         })
         console.log(result);
         const uuid = uuidv4();
@@ -75,9 +73,7 @@ module.exports.postresetpasswordController = async(req, res) => {
     const uuid=req.params.uuid;
     console.log(uuid);   
     const result=await ForgotUser.findOne({
-        where:{
             uuid:uuid,//also check that user link is isActive or not
-        }
     })
     console.log(result);
     if(result!==null){

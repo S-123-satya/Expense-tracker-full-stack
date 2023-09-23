@@ -80,9 +80,17 @@ module.exports.deleteExpenseController =async (req, res) => {
     try {
         console.log(req.token);
         console.log(req.params.id);
-        const delete_data_expense = await Expense.find()
-        let wait_user_result = await User.findById(res.tokenData.user.userId)
+        const delete_data_expense = await Expense.findByIdAndDelete(req.params.id)
+        console.log(delete_data_expense);
+        let wait_user_result = await User.findById(req.tokenData.user.userId)
         let sum = Number.parseInt(wait_user_result.total_expenses) - Number.parseInt(delete_data_expense.expenseInput);
+        await User.findByIdAndUpdate(
+            req.tokenData.user.userId,
+            {
+                total_expenses: sum,
+                // $pop:{expenses:delete_data_expense._id},
+            })
+        res.json({message:`Expense deleted`})
     }
     catch (error) {
         console.log(error);

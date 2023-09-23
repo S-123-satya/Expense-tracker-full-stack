@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const forgotUserSchema = new Schema({
-        uuid:{
+    uuid:{
         type:UUID,
         required:true
     },
@@ -11,6 +11,9 @@ const forgotUserSchema = new Schema({
         type:Boolean,
         required:true,
     } ,
+    UserId:{
+        type:mongoose.Schema.Types.ObjectId
+    }
 });
 
 const ForgotUser = mongoose.model('ForgotUser', forgotUserSchema);
