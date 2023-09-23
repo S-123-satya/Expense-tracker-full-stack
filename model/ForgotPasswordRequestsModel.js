@@ -12,7 +12,8 @@ const forgotUserSchema = new Schema({
         required:true,
     } ,
     UserId:{
-        type:mongoose.Schema.Types.ObjectId
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
     }
 });
 
