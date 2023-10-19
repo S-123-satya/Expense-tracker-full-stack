@@ -74,17 +74,17 @@ module.exports.postPremiumController = async (req, res) => {
             // generate jwt token with id and isPremirum
             const user_find = await User.findById(req.tokenData.user.userId)
             console.log(`after fetch`);
-
+                console.log(user_find);
             const user = {
-                userId: user_find.dataValues.id,
-                is_premium: user_find.dataValues.is_premium
+                userId: user_find._id,
+                is_premium: user_find.is_premium
             }
             jwt.sign({ user }, process.env.SECRET_TOKEN_KEY, (err, token) => {
                 if (err) {
                     console.log(err);
                 }
                 else {
-                    return res.json({ name: user_find.dataValues.name, token, is_premium: true })
+                    return res.json({ name: user_find.name, token, is_premium: true })
                 }
             })
         }
