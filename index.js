@@ -59,7 +59,7 @@ app.use('/updatepassword',updateRoutes)
 // .catch(err=>console.log(err));
 
 mongodb()
-.then(respose=>{
+.then((respose)=>{
     console.log(`database is connected to mongodb`);
     app.listen(port, console.log(`listening on port 3000`));
 })
