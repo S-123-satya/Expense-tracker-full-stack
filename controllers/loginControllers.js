@@ -1,50 +1,48 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const User = require('../model/userModel');
+const User = require("../model/userModel");
 
 module.exports.postLoginController = async (req, res) => {
-    try {
-        console.log(`in login post routes controller`);
-        const newUser = await User.findOne({ email: req.body.email })
-        const user={
-            userId:newUser._id,
-            is_premium:newUser.is_premium
-        }
-        if (newUser) {
-            const checkPassword = await bcrypt.compare(req.body.password, newUser.password)
-            console.log(`20`);
-            if (checkPassword) {
-                jwt.sign({ user }, process.env.SECRET_TOKEN_KEY, (err, token) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {
-                        res.json({
-                            message: "User login Succesfully", 
-                            name: newUser.name,
-                            token, 
-                            is_premium: newUser.is_premium,
-                            status:201,
-                        })
-                    }
-                })
-            }
-            else {
-                console.log(`password not matched`);
-                res.status(401);
-                res.json({ message: "user password is not correct", });
-            }
-        }
-        else{
-            res.json({message:'Invalid email id'})
-        }
+  try {
+    console.log(`in login post routes controller`);
+    const newUser = await User.findOne({ email: req.body.email });
+    const user = {
+      userId: newUser._id,
+      is_premium: newUser.is_premium,
+    };
+    if (newUser) {
+      const checkPassword = await bcrypt.compare(
+        req.body.password,
+        newUser.password
+      );
+      console.log(`20`);
+      if (checkPassword) {
+        jwt.sign({ user }, process.env.SECRET_TOKEN_KEY, (err, token) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.json({
+              message: "User login Succesfully",
+              name: newUser.name,
+              token,
+              is_premium: newUser.is_premium,
+              status: 201,
+            });
+          }
+        });
+      } else {
+        console.log(`password not matched`);
+        res.status(401);
+        res.json({ message: "user password is not correct" });
+      }
+    } else {
+      res.json({ message: "Invalid email id" });
     }
-    catch (error) {
-        console.log(error);
-        res.send({message:error.message});
-    }
-
+  } catch (error) {
+    console.log(error);
+    res.send({ message: error.message });
+  }
 };
 
 //     where: {

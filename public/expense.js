@@ -1,5 +1,3 @@
-// const e = require("cors");
-
 const url = "http://localhost:3000";
 const selectOffset = document.getElementById("offsetInput");
 console.log(selectOffset);

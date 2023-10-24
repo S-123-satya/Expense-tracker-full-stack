@@ -1,7 +1,9 @@
-const {Router}=require('express');
-const { updatePasswordControllers } = require('../controllers/updatePasswordControllers');
-const router=Router()
+const { Router } = require("express");
+const {
+  updatePasswordControllers,
+} = require("../controllers/updatePasswordControllers");
+const router = Router();
 
-router.post('/',updatePasswordControllers);
+router.post("/", updatePasswordControllers);
 
-module.exports=router;
+module.exports = router;
