@@ -3,9 +3,6 @@ const Order = require("./../model/orderModel");
 const User = require("./../model/userModel");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const Expense = require("../model/expensemodel");
-const sequelize = require("../util/db");
-const secretKey = "secretKey";
 
 // create an instance of razorpay in which we pass keyid and secertkey
 // 2. then create an options object

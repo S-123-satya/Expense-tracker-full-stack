@@ -4,7 +4,6 @@ const { createTransport } = require("nodemailer");
 const User = require("../model/userModel");
 const ForgotUser = require("../model/ForgotPasswordRequestsModel");
 const { v4: uuidv4 } = require("uuid");
-var otp = 0; //no use this time
 
 module.exports.postForgetController = async (req, res) => {
   try {
